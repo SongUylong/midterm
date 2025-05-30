@@ -15,7 +15,7 @@
     <style>
         body {
             font-family: 'Inter', sans-serif;
-            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            background: white;
             min-height: 100vh;
         }
 
@@ -25,14 +25,7 @@
         }
 
         .dashboard-container::before {
-            content: '';
-            position: absolute;
-            top: 0;
-            left: 0;
-            right: 0;
-            bottom: 0;
-            background: url('data:image/svg+xml,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 100 100"><defs><pattern id="grain" width="100" height="100" patternUnits="userSpaceOnUse"><circle cx="50" cy="50" r="0.5" fill="white" opacity="0.1"/></pattern></defs><rect width="100" height="100" fill="url(%23grain)"/></svg>');
-            pointer-events: none;
+            display: none;
         }
 
         .sidebar {
@@ -40,28 +33,21 @@
             top: 0;
             left: 0;
             height: 100vh;
-            width: 220px;
-            background: rgba(255, 255, 255, 0.95);
-            backdrop-filter: blur(20px);
-            padding: 1.5rem;
-            box-shadow: 0 20px 40px rgba(0, 0, 0, 0.1);
-            border-right: 1px solid rgba(255, 255, 255, 0.2);
+            width: 280px;
+            background: white;
+            padding: 2rem;
+            box-shadow: 0 0 20px rgba(0, 0, 0, 0.05);
+            border-right: 1px solid rgba(0, 0, 0, 0.1);
             z-index: 1000;
+            overflow-y: auto;
         }
 
         .sidebar::before {
-            content: '';
-            position: absolute;
-            top: 0;
-            left: 0;
-            right: 0;
-            bottom: 0;
-            background: linear-gradient(135deg, rgba(255,255,255,0.1), rgba(255,255,255,0.05));
-            pointer-events: none;
+            display: none;
         }
 
         .main-content {
-            margin-left: 220px;
+            margin-left: 280px;
             padding: 2rem;
             position: relative;
         }
@@ -69,31 +55,31 @@
         .user-info {
             display: flex;
             align-items: center;
-            margin-bottom: 1.5rem;
-            padding: 0.875rem;
-            background: rgba(76, 132, 255, 0.08);
-            border-radius: 12px;
+            margin-bottom: 2rem;
+            padding: 1rem;
+            background: rgba(76, 132, 255, 0.05);
+            border-radius: 15px;
             border-left: 3px solid var(--primary-color);
             position: relative;
         }
 
         .user-avatar {
-            width: 40px;
-            height: 40px;
-            border-radius: 50%;
+            width: 50px;
+            height: 50px;
+            border-radius: 12px;
             background: linear-gradient(135deg, var(--primary-color), #5a6fd8);
             color: white;
             display: flex;
             align-items: center;
             justify-content: center;
-            font-size: 1.1rem;
-            margin-right: 0.875rem;
+            font-size: 1.2rem;
+            margin-right: 1rem;
             border: 2px solid rgba(76, 132, 255, 0.2);
             transition: all 0.3s ease;
         }
 
         .nav-link {
-            padding: 0.75rem 1rem;
+            padding: 0.875rem 1.25rem;
             border-radius: 12px;
             margin-bottom: 0.5rem;
             color: var(--dark-color);
@@ -101,11 +87,10 @@
             text-decoration: none;
             display: flex;
             align-items: center;
-            gap: 0.75rem;
+            gap: 1rem;
             font-weight: 500;
-            font-size: 0.9rem;
+            font-size: 0.95rem;
             position: relative;
-            overflow: hidden;
         }
 
         .nav-link::before {
@@ -124,39 +109,46 @@
         }
 
         .nav-link:hover, .nav-link.active {
-            background: linear-gradient(135deg, rgba(76, 132, 255, 0.1), rgba(76, 132, 255, 0.05));
+            background: rgba(76, 132, 255, 0.05);
             color: var(--primary-color);
-            transform: translateX(6px);
-            box-shadow: 0 4px 12px rgba(76, 132, 255, 0.2);
+            transform: translateX(5px);
         }
 
         .nav-link i {
-            width: 20px;
-            font-size: 1rem;
+            width: 24px;
+            font-size: 1.1rem;
             text-align: center;
+            color: #6c757d;
+            transition: all 0.3s ease;
+        }
+
+        .nav-link:hover i, .nav-link.active i {
+            color: var(--primary-color);
         }
 
         .nav-link span {
-            font-size: 0.875rem;
+            font-size: 0.95rem;
         }
 
         .user-info h6 {
-            font-size: 0.8rem;
+            font-size: 0.95rem;
             margin-bottom: 0.25rem;
+            color: var(--dark-color);
+            font-weight: 600;
         }
 
         .user-info small {
-            font-size: 0.7rem;
+            font-size: 0.85rem;
+            color: #6c757d;
         }
 
         .stats-card {
-            background: rgba(255, 255, 255, 0.95);
-            backdrop-filter: blur(20px);
+            background: white;
             border-radius: 20px;
             padding: 2rem;
             margin-bottom: 2rem;
             box-shadow: 0 10px 30px rgba(0, 0, 0, 0.1);
-            border: 1px solid rgba(255, 255, 255, 0.2);
+            border: 1px solid rgba(0, 0, 0, 0.1);
             transition: all 0.3s ease;
             position: relative;
             overflow: hidden;
@@ -199,17 +191,61 @@
         }
 
         .page-title {
-            color: white;
+            color: var(--dark-color);
             font-weight: 700;
             font-size: 2.5rem;
             margin-bottom: 0.5rem;
-            text-shadow: 0 2px 4px rgba(0,0,0,0.3);
+            text-shadow: none;
         }
 
         .page-subtitle {
-            color: rgba(255,255,255,0.9);
+            color: rgba(0, 0, 0, 0.7);
             font-size: 1.1rem;
             margin-bottom: 2rem;
+        }
+
+        .section-title {
+            color: var(--dark-color);
+            font-weight: 600;
+            margin-bottom: 1.5rem;
+        }
+
+        .stats-value {
+            color: var(--dark-color);
+            font-size: 1.8rem;
+            font-weight: 700;
+            margin-bottom: 0.5rem;
+        }
+
+        .stats-label {
+            color: rgba(0, 0, 0, 0.7);
+            font-size: 0.9rem;
+        }
+
+        .ride-status {
+            color: var(--dark-color);
+        }
+
+        .ride-info {
+            color: var(--dark-color);
+        }
+
+        .ride-list h5 {
+            color: var(--dark-color);
+        }
+
+        .ride-list p {
+            color: rgba(0, 0, 0, 0.7);
+        }
+
+        .empty-state {
+            color: rgba(0, 0, 0, 0.7);
+        }
+
+        .chart-title {
+            color: var(--dark-color);
+            font-weight: 600;
+            margin-bottom: 1rem;
         }
 
         .add-ride-form {
@@ -633,6 +669,7 @@
             font-weight: 700;
             text-transform: uppercase;
             letter-spacing: 0.8px;
+            color:white;
             position: relative;
             overflow: hidden;
             border: 2px solid transparent;
@@ -753,8 +790,6 @@
             .sidebar {
                 transform: translateX(-100%);
                 transition: transform 0.3s ease;
-                z-index: 1050;
-                width: 220px;
             }
 
             .sidebar.show {
@@ -778,6 +813,64 @@
             .nav-link span {
                 font-size: 0.875rem;
             }
+        }
+
+        .table {
+            color: var(--dark-color);
+        }
+
+        .table th {
+            color: var(--dark-color);
+            font-weight: 600;
+        }
+
+        .table td {
+            color: rgba(0, 0, 0, 0.8);
+        }
+
+        .status-badge {
+            padding: 0.35rem 0.75rem;
+            border-radius: 20px;
+            font-size: 0.875rem;
+            font-weight: 500;
+        }
+
+        .status-active {
+            background-color: rgba(40, 199, 111, 0.1);
+            color: #28c76f;
+        }
+
+        .status-pending {
+            background-color: rgba(255, 159, 67, 0.1);
+            color: #ff9f43;
+        }
+
+        .status-completed {
+            background-color: rgba(76, 132, 255, 0.1);
+            color: var(--primary-color);
+        }
+
+        .status-cancelled {
+            background-color: rgba(234, 84, 85, 0.1);
+            color: #ea5455;
+        }
+
+        .form-label {
+            color: var(--dark-color);
+            font-weight: 500;
+        }
+
+        .stat-change {
+            font-size: 0.875rem;
+            margin-left: 0.5rem;
+        }
+
+        .stat-increase {
+            color: #28c76f;
+        }
+
+        .stat-decrease {
+            color: #ea5455;
         }
     </style>
 </head>
@@ -903,20 +996,39 @@
                                 </div>
                             </div>
                             <div class="col-md-2">
+                                <div class="ride-date-time">
                                 <small class="text-muted d-block">Date & Time</small>
-                                <div>Feb 16, 2024</div>
-                                <div>14:30</div>
+                                    <div class="ride-date">Feb 16, 2024</div>
+                                    <div class="ride-time">14:30</div>
                             </div>
-                            <div class="col-md-2">
-                                <small class="text-muted d-block">Passengers</small>
-                                <div>Sarah M.</div>
-                                <div>John D.</div>
                             </div>
-                            <div class="col-md-2">
-                                <span class="status-badge status-completed">Completed</span>
+                            <div class="col-md-3">
+                                <div class="booking-status-section">
+                                    <div class="status-number">2</div>
+                                    <div class="status-description">Total Passengers</div>
+                                    <div class="status-details">2/4 seats booked</div>
+                                    <div class="seat-progress">
+                                        <div class="seat-progress-bar">
+                                            <div class="seat-progress-fill" style="width: 50%"></div>
                             </div>
-                            <div class="col-md-2 text-end">
-                                <strong class="text-success">$45.00</strong>
+                                        <small class="text-muted mt-1 d-block">2 seats available</small>
+                            </div>
+                        </div>
+                    </div>
+                            <div class="col-md-3">
+                                <div class="mb-3">
+                                    <span class="status-badge status-active" style="color:white;">Active</span>
+                                </div>
+                                <div class="action-buttons">
+                                    <button class="btn btn-primary btn-sm mb-2 w-100" onclick="viewPassengers(1)">
+                                        👥 View Passengers
+                                    </button>
+                                    <button class="btn btn-outline-primary btn-sm w-100" onclick="editRide(1)">✏️ Edit Ride</button>
+                                </div>
+                                <div class="earnings-preview mt-2">
+                                    <div class="earnings-amount">$45.00</div>
+                                    <div class="earnings-label">Current Earnings</div>
+                                </div>
                             </div>
                         </div>
                     </div>
@@ -1010,9 +1122,8 @@
             <div class="ride-list">
                     <h5 class="mb-4">🟢 Active Rides</h5>
                     
-                    <!-- Ride 1 - With Pending Bookings -->
-                    <div class="ride-item pending-bookings">
-                        <div class="booking-status-indicator pending"></div>
+                    <!-- Ride 1 - Not Fully Booked -->
+                    <div class="ride-item">
                     <div class="row align-items-center">
                         <div class="col-md-4">
                             <div class="route-info">
@@ -1035,30 +1146,30 @@
                         </div>
                             <div class="col-md-3">
                                 <div class="booking-status-section">
-                                    <div class="status-number">3</div>
-                                    <div class="status-description">Pending Requests</div>
-                                    <div class="status-details">2/4 seats confirmed</div>
+                                    <div class="status-number">2</div>
+                                    <div class="status-description">Total Passengers</div>
+                                    <div class="status-details">2/4 seats booked</div>
                                     <div class="seat-progress">
                                         <div class="seat-progress-bar">
                                             <div class="seat-progress-fill" style="width: 50%"></div>
                         </div>
-                                        <small class="text-muted mt-1 d-block">50% filled</small>
+                                        <small class="text-muted mt-1 d-block">2 seats available</small>
                                     </div>
                                 </div>
                             </div>
                             <div class="col-md-3">
                                 <div class="mb-3">
-                                    <span class="status-badge status-pending-bookings">Pending Bookings</span>
+                                    <span class="status-badge status-active" style="color:white;">Active</span>
                                 </div>
                                 <div class="action-buttons">
-                                    <button class="btn btn-view-requests" onclick="viewBookingRequests(1)">
-                                        👥 View Requests
+                                    <button class="btn btn-primary btn-sm mb-2 w-100" onclick="viewPassengers(1)">
+                                        👥 View Passengers
                                     </button>
-                                    <button class="btn btn-outline-primary btn-sm" onclick="editRide(1)">✏️ Edit</button>
+                                    <button class="btn btn-outline-primary btn-sm w-100" onclick="editRide(1)">✏️ Edit Ride</button>
                                 </div>
-                                <div class="earnings-preview">
-                                    <div class="earnings-amount">$90.00</div>
-                                    <div class="earnings-label">Potential Earnings</div>
+                                <div class="earnings-preview mt-2">
+                                    <div class="earnings-amount">$45.00</div>
+                                    <div class="earnings-label">Current Earnings</div>
                                 </div>
                         </div>
                     </div>
@@ -1090,7 +1201,7 @@
                             <div class="col-md-3">
                                 <div class="booking-status-section confirmed">
                                     <div class="status-number confirmed">4</div>
-                                    <div class="status-description">All Confirmed</div>
+                                    <div class="status-description">Total Passengers</div>
                                     <div class="status-details">4/4 seats booked</div>
                                     <div class="seat-progress">
                                         <div class="seat-progress-bar">
@@ -1102,17 +1213,17 @@
                             </div>
                             <div class="col-md-3">
                                 <div class="mb-3">
-                                    <span class="status-badge status-active">Fully Booked</span>
+                                    <span class="status-badge status-active" style="color:white;">Fully Booked</span>
                                 </div>
                                 <div class="action-buttons">
-                                    <button class="btn btn-view-passengers" onclick="viewConfirmedPassengers(2)">
-                                        ✅ View Passengers
+                                    <button class="btn btn-primary btn-sm mb-2 w-100" onclick="viewPassengers(2)">
+                                        👥 View Passengers
                                     </button>
-                                    <button class="btn btn-outline-danger btn-sm" onclick="cancelRide(2)">❌ Cancel</button>
+                                    <button class="btn btn-outline-primary btn-sm w-100" onclick="editRide(2)">✏️ Edit Ride</button>
                                 </div>
-                                <div class="earnings-preview">
+                                <div class="earnings-preview mt-2">
                                     <div class="earnings-amount">$90.00</div>
-                                    <div class="earnings-label">Confirmed Earnings</div>
+                                    <div class="earnings-label">Total Earnings</div>
                                 </div>
                             </div>
                         </div>
@@ -1156,7 +1267,7 @@
                             </div>
                             <div class="col-md-3">
                                 <div class="mb-3">
-                            <span class="status-badge status-active">Active</span>
+                            <span class="status-badge status-active" style="color:white;">Active</span>
                         </div>
                                 <div class="action-buttons">
                                     <button class="btn btn-outline-primary" onclick="editRide(3)">✏️ Edit Ride</button>
@@ -1220,11 +1331,19 @@
                             <option>This Year</option>
                     </select>
                 </div>
-                    <div class="chart-placeholder" style="height: 300px; background: linear-gradient(135deg, #f8f9fa, #e9ecef); border-radius: 10px; display: flex; align-items: center; justify-content: center;">
-                        <div class="text-center">
-                            <i class="fas fa-chart-line fa-3x text-primary mb-3"></i>
-                            <p class="text-muted mb-0">Detailed earnings chart will be displayed here</p>
+                <div style="height: 300px; border-radius: 10px; overflow: hidden; background: white; padding: 20px;">
+                    <img src="https://images.unsplash.com/photo-1526628953301-3e589a6a8b74?w=1200&h=400&fit=crop" 
+                         alt="Earnings Chart" 
+                         style="width: 100%; height: 100%; object-fit: contain;"
+                         class="shadow-sm">
                         </div>
+                <div class="d-flex justify-content-between mt-3">
+                    <div class="text-muted">
+                        <small>📈 Trend: +15% vs last period</small>
+                    </div>
+                    <div class="text-success">
+                        <small>🎯 On track to meet monthly goal</small>
+                    </div>
                     </div>
                 </div>
             </div>
@@ -1412,167 +1531,6 @@
         </div>
     </div>
 
-    <!-- Booking Requests Modal -->
-    <div class="modal fade" id="bookingRequestsModal" tabindex="-1" aria-labelledby="bookingRequestsModalLabel" aria-hidden="true">
-        <div class="modal-dialog modal-lg">
-            <div class="modal-content" style="background: rgba(255, 255, 255, 0.95); backdrop-filter: blur(20px); border-radius: 20px; border: 1px solid rgba(255, 255, 255, 0.2);">
-                <div class="modal-header" style="border-bottom: 1px solid rgba(0,0,0,0.1);">
-                    <h5 class="modal-title" id="bookingRequestsModalLabel">📋 Booking Requests</h5>
-                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
-                </div>
-                <div class="modal-body">
-                    <div class="mb-4 p-3" style="background: rgba(76, 132, 255, 0.05); border-radius: 12px; border-left: 4px solid var(--primary-color);">
-                        <h6 class="mb-1">🚗 Ride Details</h6>
-                        <div class="d-flex justify-content-between">
-                            <span><strong>Route:</strong> Central Station → Airport Terminal 1</span>
-                            <span><strong>Date:</strong> Feb 16, 2024 at 14:30</span>
-                        </div>
-                        <div class="mt-2">
-                            <span class="badge bg-success me-2">2 Confirmed</span>
-                            <span class="badge bg-warning">3 Pending</span>
-                            <span class="badge bg-secondary ms-2">Total Seats: 4</span>
-                        </div>
-                    </div>
-
-                    <h6 class="mb-3">⏳ Pending Booking Requests</h6>
-                    
-                    <!-- Booking Request 1 -->
-                    <div class="booking-request-item mb-3 p-3" style="background: rgba(255,255,255,0.8); border-radius: 15px; border: 2px solid rgba(0,0,0,0.08);" id="request-1">
-                        <div class="row align-items-center">
-                            <div class="col-md-2">
-                                <img src="https://images.unsplash.com/photo-1494790108755-2616b612b786?w=60&h=60&fit=crop&crop=face" 
-                                     alt="Passenger" class="rounded-circle" width="60" height="60"
-                                     style="border: 2px solid var(--primary-color);">
-                            </div>
-                            <div class="col-md-4">
-                                <h6 class="mb-1">Sarah Johnson</h6>
-                                <small class="text-muted">📱 +1 (555) 123-4567</small><br>
-                                <div class="rating-stars text-warning">⭐⭐⭐⭐⭐ <small class="text-muted">(4.9 rating)</small></div>
-                            </div>
-                            <div class="col-md-3">
-                                <div class="text-center">
-                                    <div class="fw-bold text-success">$45.00</div>
-                                    <small class="text-muted">2 seats requested</small>
-                                    <div class="mt-1">
-                                        <small class="text-primary">💳 Payment Ready</small>
-                                    </div>
-                                </div>
-                            </div>
-                            <div class="col-md-3 text-end">
-                                <button class="btn btn-success btn-sm me-1" onclick="confirmBooking(1, 'Sarah Johnson')">
-                                    ✅ Confirm
-                                </button>
-                                <button class="btn btn-outline-danger btn-sm" onclick="rejectBooking(1, 'Sarah Johnson')">
-                                    ❌ Reject
-                                </button>
-                            </div>
-                        </div>
-                    </div>
-
-                    <!-- Booking Request 2 -->
-                    <div class="booking-request-item mb-3 p-3" style="background: rgba(255,255,255,0.8); border-radius: 15px; border: 2px solid rgba(0,0,0,0.08);" id="request-2">
-                        <div class="row align-items-center">
-                            <div class="col-md-2">
-                                <img src="https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?w=60&h=60&fit=crop&crop=face" 
-                                     alt="Passenger" class="rounded-circle" width="60" height="60"
-                                     style="border: 2px solid var(--primary-color);">
-                            </div>
-                            <div class="col-md-4">
-                                <h6 class="mb-1">John Davis</h6>
-                                <small class="text-muted">📱 +1 (555) 987-6543</small><br>
-                                <div class="rating-stars text-warning">⭐⭐⭐⭐ <small class="text-muted">(4.2 rating)</small></div>
-                            </div>
-                            <div class="col-md-3">
-                                <div class="text-center">
-                                    <div class="fw-bold text-success">$22.50</div>
-                                    <small class="text-muted">1 seat requested</small>
-                                    <div class="mt-1">
-                                        <small class="text-primary">💳 Payment Ready</small>
-                                    </div>
-                                </div>
-                            </div>
-                            <div class="col-md-3 text-end">
-                                <button class="btn btn-success btn-sm me-1" onclick="confirmBooking(2, 'John Davis')">
-                                    ✅ Confirm
-                                </button>
-                                <button class="btn btn-outline-danger btn-sm" onclick="rejectBooking(2, 'John Davis')">
-                                    ❌ Reject
-                                </button>
-                            </div>
-                        </div>
-                    </div>
-
-                    <!-- Booking Request 3 -->
-                    <div class="booking-request-item mb-3 p-3" style="background: rgba(255,255,255,0.8); border-radius: 15px; border: 2px solid rgba(0,0,0,0.08);" id="request-3">
-                        <div class="row align-items-center">
-                            <div class="col-md-2">
-                                <img src="https://images.unsplash.com/photo-1580489944761-15a19d654956?w=60&h=60&fit=crop&crop=face" 
-                                     alt="Passenger" class="rounded-circle" width="60" height="60"
-                                     style="border: 2px solid var(--primary-color);">
-                            </div>
-                            <div class="col-md-4">
-                                <h6 class="mb-1">Emily Chen</h6>
-                                <small class="text-muted">📱 +1 (555) 456-7890</small><br>
-                                <div class="rating-stars text-warning">⭐⭐⭐⭐⭐ <small class="text-muted">(4.8 rating)</small></div>
-                            </div>
-                            <div class="col-md-3">
-                                <div class="text-center">
-                                    <div class="fw-bold text-success">$22.50</div>
-                                    <small class="text-muted">1 seat requested</small>
-                                    <div class="mt-1">
-                                        <small class="text-primary">💳 Payment Ready</small>
-                                    </div>
-                                </div>
-                            </div>
-                            <div class="col-md-3 text-end">
-                                <button class="btn btn-success btn-sm me-1" onclick="confirmBooking(3, 'Emily Chen')">
-                                    ✅ Confirm
-                                </button>
-                                <button class="btn btn-outline-danger btn-sm" onclick="rejectBooking(3, 'Emily Chen')">
-                                    ❌ Reject
-                                </button>
-                            </div>
-                        </div>
-                    </div>
-
-                    <div class="mt-4">
-                        <h6 class="mb-3">✅ Confirmed Passengers</h6>
-                        <div class="confirmed-passengers">
-                            <div class="d-flex align-items-center mb-2 p-2" style="background: rgba(81, 207, 102, 0.1); border-radius: 10px;">
-                                <img src="https://images.unsplash.com/photo-1535713875002-d1d0cf377fde?w=40&h=40&fit=crop&crop=face" 
-                                     alt="Confirmed Passenger" class="rounded-circle me-3" width="40" height="40">
-                                <div class="flex-grow-1">
-                                    <strong>Michael Wilson</strong>
-                                    <small class="text-muted d-block">1 seat • $22.50</small>
-                                </div>
-                                <button class="btn btn-outline-danger btn-sm" onclick="removePassenger('Michael Wilson')">
-                                    🚫 Remove
-                                </button>
-                            </div>
-                            <div class="d-flex align-items-center mb-2 p-2" style="background: rgba(81, 207, 102, 0.1); border-radius: 10px;">
-                                <img src="https://images.unsplash.com/photo-1472099645785-5658abf4ff4e?w=40&h=40&fit=crop&crop=face" 
-                                     alt="Confirmed Passenger" class="rounded-circle me-3" width="40" height="40">
-                                <div class="flex-grow-1">
-                                    <strong>David Thompson</strong>
-                                    <small class="text-muted d-block">1 seat • $22.50</small>
-                                </div>
-                                <button class="btn btn-outline-danger btn-sm" onclick="removePassenger('David Thompson')">
-                                    🚫 Remove
-                                </button>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-                <div class="modal-footer" style="border-top: 1px solid rgba(0,0,0,0.1);">
-                    <button type="button" class="btn btn-outline-secondary" data-bs-dismiss="modal">Close</button>
-                    <button type="button" class="btn btn-success" onclick="confirmAllRequests()">
-                        ✅ Confirm All Pending
-                    </button>
-                </div>
-            </div>
-        </div>
-    </div>
-
     <!-- Bootstrap JS -->
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
     <script>
@@ -1697,112 +1655,6 @@
         });
 
         // Booking Management Functions
-        function viewBookingRequests(rideId) {
-            // Show the booking requests modal
-            const modal = new bootstrap.Modal(document.getElementById('bookingRequestsModal'));
-            modal.show();
-        }
-
-        function viewConfirmedPassengers(rideId) {
-            alert('👥 Viewing confirmed passengers:\n\n• Michael Wilson (1 seat)\n• David Thompson (1 seat)\n• Sarah Johnson (2 seats)\n\nTotal: 4/4 seats confirmed\nEarnings: $90.00');
-        }
-
-        function confirmBooking(requestId, passengerName) {
-            if (confirm(`✅ Confirm booking for ${passengerName}?`)) {
-                // Add visual feedback
-                const requestElement = document.getElementById(`request-${requestId}`);
-                requestElement.style.background = 'rgba(81, 207, 102, 0.1)';
-                requestElement.style.borderColor = '#51cf66';
-                
-                // Disable buttons and show confirmed status
-                const buttons = requestElement.querySelectorAll('button');
-                buttons.forEach(btn => btn.disabled = true);
-                
-                // Update button text
-                buttons[0].innerHTML = '✅ Confirmed';
-                buttons[0].className = 'btn btn-success btn-sm disabled';
-                
-                // Success message
-                setTimeout(() => {
-                    alert(`🎉 Booking confirmed for ${passengerName}!\n\n• Notification sent to passenger\n• Payment will be processed\n• Updated seat count: 3/4 confirmed`);
-                    
-                    // Remove from pending and add to confirmed
-                    setTimeout(() => {
-                        requestElement.remove();
-                        updateBookingCounts();
-                    }, 1000);
-                }, 500);
-            }
-        }
-
-        function rejectBooking(requestId, passengerName) {
-            const reason = prompt(`❌ Reject booking for ${passengerName}?\n\nOptional reason (will be sent to passenger):`);
-            
-            if (reason !== null) { // User didn't cancel
-                // Add visual feedback
-                const requestElement = document.getElementById(`request-${requestId}`);
-                requestElement.style.background = 'rgba(255, 107, 107, 0.1)';
-                requestElement.style.borderColor = '#ff6b6b';
-                
-                // Disable buttons and show rejected status
-                const buttons = requestElement.querySelectorAll('button');
-                buttons.forEach(btn => btn.disabled = true);
-                
-                // Update button text
-                buttons[1].innerHTML = '❌ Rejected';
-                buttons[1].className = 'btn btn-danger btn-sm disabled';
-                
-                // Success message
-                setTimeout(() => {
-                    alert(`🚫 Booking rejected for ${passengerName}!\n\n• Notification sent to passenger\n• Refund will be processed\n• Reason: ${reason || 'No reason provided'}`);
-                    
-                    // Remove from pending
-                    setTimeout(() => {
-                        requestElement.remove();
-                        updateBookingCounts();
-                    }, 1000);
-                }, 500);
-            }
-        }
-
-        function removePassenger(passengerName) {
-            if (confirm(`🚫 Remove ${passengerName} from this ride?\n\nThis will:\n• Cancel their booking\n• Process a refund\n• Free up their seat(s)`)) {
-                alert(`✅ ${passengerName} has been removed from the ride.\n\n• Refund processed\n• Seat(s) now available\n• Notification sent to passenger`);
-                
-                // In a real app, you would update the confirmed passengers list
-                location.reload(); // Reload to show updated state
-            }
-        }
-
-        function confirmAllRequests() {
-            if (confirm('✅ Confirm ALL pending booking requests?\n\nThis will confirm:\n• Sarah Johnson (2 seats)\n• John Davis (1 seat)\n• Emily Chen (1 seat)\n\nTotal: 4 additional seats')) {
-                alert('🎉 All booking requests confirmed!\n\n• All passengers notified\n• Payments will be processed\n• Ride is now full (4/4 seats)');
-                
-                // Close modal and update ride status
-                const modal = bootstrap.Modal.getInstance(document.getElementById('bookingRequestsModal'));
-                modal.hide();
-                
-                // Update the ride status in the list
-                setTimeout(() => {
-                    location.reload(); // In a real app, update dynamically
-                }, 1000);
-            }
-        }
-
-        function updateBookingCounts() {
-            // Update badge counts in modal
-            const pendingBadge = document.querySelector('.badge.bg-warning');
-            const confirmedBadge = document.querySelector('.badge.bg-success');
-            
-            if (pendingBadge && confirmedBadge) {
-                let pendingCount = parseInt(pendingBadge.textContent.split(' ')[0]) - 1;
-                let confirmedCount = parseInt(confirmedBadge.textContent.split(' ')[0]) + 1;
-                
-                pendingBadge.textContent = `${pendingCount} Pending`;
-                confirmedBadge.textContent = `${confirmedCount} Confirmed`;
-            }
-        }
-
         function editRide(rideId) {
             alert(`✏️ Edit ride functionality:\n\n• Modify departure time\n• Update pickup/dropoff locations\n• Change number of available seats\n• Adjust pricing\n• Add special requirements`);
         }
@@ -1811,6 +1663,68 @@
             if (confirm('❌ Cancel this ride?\n\nThis will:\n• Notify all passengers\n• Process refunds\n• Remove the ride offer')) {
                 alert('🚫 Ride cancelled successfully!\n\n• All passengers notified\n• Refunds being processed\n• Ride removed from listings');
             }
+        }
+
+        // View Passengers Modal
+        function viewPassengers(rideId) {
+            // Different passenger lists based on ride ID
+            const passengersList = rideId === 1 ? [
+                { name: 'Michael Wilson', seats: 1, amount: 22.50, image: 'https://images.unsplash.com/photo-1535713875002-d1d0cf377fde?w=40&h=40&fit=crop&crop=face' },
+                { name: 'David Thompson', seats: 1, amount: 22.50, image: 'https://images.unsplash.com/photo-1472099645785-5658abf4ff4e?w=40&h=40&fit=crop&crop=face' }
+            ] : [
+                { name: 'Michael Wilson', seats: 1, amount: 22.50, image: 'https://images.unsplash.com/photo-1535713875002-d1d0cf377fde?w=40&h=40&fit=crop&crop=face' },
+                { name: 'David Thompson', seats: 1, amount: 22.50, image: 'https://images.unsplash.com/photo-1472099645785-5658abf4ff4e?w=40&h=40&fit=crop&crop=face' },
+                { name: 'Sarah Johnson', seats: 2, amount: 45.00, image: 'https://images.unsplash.com/photo-1494790108755-2616b612b786?w=40&h=40&fit=crop&crop=face' }
+            ];
+
+            const totalEarnings = passengersList.reduce((sum, p) => sum + p.amount, 0);
+
+            let modalContent = `
+                <div class="modal fade" id="passengersModal" tabindex="-1">
+                    <div class="modal-dialog">
+                        <div class="modal-content">
+                            <div class="modal-header">
+                                <h5 class="modal-title">👥 Confirmed Passengers</h5>
+                                <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+                            </div>
+                            <div class="modal-body">
+                                <div class="list-group">
+                                    ${passengersList.map(passenger => `
+                                        <div class="list-group-item">
+                                            <div class="d-flex align-items-center">
+                                                <img src="${passenger.image}" class="rounded-circle me-3" width="40" height="40">
+                                                <div class="flex-grow-1">
+                                                    <h6 class="mb-0">${passenger.name}</h6>
+                                                    <small class="text-muted">${passenger.seats} seat${passenger.seats > 1 ? 's' : ''} • $${passenger.amount.toFixed(2)}</small>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    `).join('')}
+                                </div>
+                                <div class="text-end mt-3">
+                                    <small class="text-muted">Total Earnings: $${totalEarnings.toFixed(2)}</small>
+                                </div>
+                            </div>
+                            <div class="modal-footer">
+                                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            `;
+
+            // Remove existing modal if any
+            const existingModal = document.getElementById('passengersModal');
+            if (existingModal) {
+                existingModal.remove();
+            }
+
+            // Add new modal to body
+            document.body.insertAdjacentHTML('beforeend', modalContent);
+
+            // Show modal
+            const modal = new bootstrap.Modal(document.getElementById('passengersModal'));
+            modal.show();
         }
     </script>
 </body>

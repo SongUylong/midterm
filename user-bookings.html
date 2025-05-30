@@ -395,17 +395,7 @@
                     <li class="nav-item">
                         <a class="nav-link active" href="#" onclick="filterBookings('all')">All Bookings</a>
                     </li>
-                    <li class="nav-item">
-                        <a class="nav-link" href="#" onclick="filterBookings('upcoming')">Upcoming</a>
-                    </li>
-                    <li class="nav-item">
-                        <a class="nav-link" href="#" onclick="filterBookings('pending')">Pending</a>
-                    </li>
-                    <li class="nav-item">
-                        <a class="nav-link" href="#" onclick="filterBookings('unpaid')">💳 Unpaid</a>
-                    </li>
-                    <li class="nav-item">
-                        <a class="nav-link" href="#" onclick="filterBookings('cancelled')">Cancelled</a>
+                   
                     </li>
                 </ul>
             </div>
@@ -463,113 +453,6 @@
                 </div>
             </div>
 
-            <!-- Pending Booking -->
-            <div class="booking-card" data-status="pending" data-payment="unpaid">
-                <div class="row align-items-center">
-                    <div class="col-md-4">
-                        <div class="route-info">
-                            <div class="route-point">
-                                <small class="text-muted">📍 Pickup</small>
-                                <div class="fw-bold">Shopping Mall</div>
-                                <small class="text-muted">Tomorrow at 16:00</small>
-                            </div>
-                            <div class="route-point">
-                                <small class="text-muted">🎯 Destination</small>
-                                <div class="fw-bold">University Campus</div>
-                                <small class="text-muted">Estimated arrival: 16:30</small>
-                            </div>
-                        </div>
-                    </div>
-                    <div class="col-md-4">
-                        <div class="driver-info">
-                            <img src="https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?w=50&h=50&fit=crop&crop=face" alt="Driver" class="driver-avatar">
-                            <div>
-                                <div class="fw-bold">David Wilson</div>
-                                <small class="text-muted">⭐ 4.9 • Toyota Camry</small>
-                                <div class="text-muted">Awaiting confirmation</div>
-                            </div>
-                        </div>
-                        <div class="payment-section unpaid">
-                            <div class="d-flex justify-content-between align-items-center">
-                                <div>
-                                    <div class="fw-bold text-warning">$25.00</div>
-                                    <small class="text-muted">1 seat requested</small>
-                                </div>
-                                <div class="payment-status unpaid">
-                                    <i class="fas fa-exclamation-circle"></i>
-                                    <span>Payment Required</span>
-                                </div>
-                            </div>
-                            <div class="mt-2">
-                                <button class="btn btn-pay-now btn-sm w-100" onclick="payNow(2, 25.00)">
-                                    <i class="fas fa-credit-card me-1"></i> Pay Now
-                                </button>
-                            </div>
-                        </div>
-                    </div>
-                    <div class="col-md-2">
-                        <span class="status-badge status-pending">Pending</span>
-                    </div>
-                    <div class="col-md-2 text-end">
-                        <button class="btn btn-outline-danger btn-sm mb-2" onclick="cancelBooking(2)">
-                            <i class="fas fa-times"></i> Cancel
-                        </button>
-                        <button class="btn btn-primary btn-sm" onclick="viewDetails(2)">
-                            <i class="fas fa-eye"></i> Details
-                        </button>
-                    </div>
-                </div>
-            </div>
-
-            <!-- Cancelled Booking -->
-            <div class="booking-card" data-status="cancelled" data-payment="refunded" style="opacity: 0.7;">
-                <div class="row align-items-center">
-                    <div class="col-md-4">
-                        <div class="route-info">
-                            <div class="route-point">
-                                <small class="text-muted">📍 Pickup</small>
-                                <div class="fw-bold">Downtown</div>
-                                <small class="text-muted">Yesterday at 09:00</small>
-                            </div>
-                            <div class="route-point">
-                                <small class="text-muted">🎯 Destination</small>
-                                <div class="fw-bold">Conference Center</div>
-                                <small class="text-muted">Cancelled by driver</small>
-                            </div>
-                        </div>
-                    </div>
-                    <div class="col-md-4">
-                        <div class="driver-info">
-                            <img src="https://images.unsplash.com/photo-1535713875002-d1d0cf377fde?w=50&h=50&fit=crop&crop=face" alt="Driver" class="driver-avatar">
-                            <div>
-                                <div class="fw-bold">Robert Johnson</div>
-                                <small class="text-muted">⭐ 4.7 • BMW 3 Series</small>
-                                <div class="text-danger">Ride cancelled</div>
-                            </div>
-                        </div>
-                        <div class="payment-section paid">
-                            <div class="d-flex justify-content-between align-items-center">
-                                <div>
-                                    <div class="fw-bold text-muted">$30.00</div>
-                                    <small class="text-success">Refund processed</small>
-                                </div>
-                                <div class="payment-status paid">
-                                    <i class="fas fa-undo"></i>
-                                    <span>Refunded</span>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                    <div class="col-md-2">
-                        <span class="status-badge status-cancelled">Cancelled</span>
-                    </div>
-                    <div class="col-md-2 text-end">
-                        <button class="btn btn-primary btn-sm" onclick="rebookRide()">
-                            <i class="fas fa-redo"></i> Book Again
-                        </button>
-                    </div>
-                </div>
-            </div>
 
             <!-- No Bookings Message (hidden by default) -->
             <div class="no-bookings" id="noBookingsMessage" style="display: none;">

@@ -15,7 +15,7 @@
     <style>
         body {
             font-family: 'Inter', sans-serif;
-            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            background: white;
             min-height: 100vh;
         }
 
@@ -26,23 +26,15 @@
         }
 
         .profile-container::before {
-            content: '';
-            position: absolute;
-            top: 0;
-            left: 0;
-            right: 0;
-            bottom: 0;
-            background: url('data:image/svg+xml,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 100 100"><defs><pattern id="grain" width="100" height="100" patternUnits="userSpaceOnUse"><circle cx="50" cy="50" r="0.5" fill="white" opacity="0.1"/></pattern></defs><rect width="100" height="100" fill="url(%23grain)"/></svg>');
-            pointer-events: none;
+            display: none;
         }
 
         .main-card {
-            background: rgba(255, 255, 255, 0.95);
-            backdrop-filter: blur(20px);
+            background: white;
             border-radius: 25px;
             padding: 3rem;
-            box-shadow: 0 20px 60px rgba(0, 0, 0, 0.1);
-            border: 1px solid rgba(255, 255, 255, 0.2);
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.1);
+            border: 1px solid rgba(0, 0, 0, 0.1);
             position: relative;
             overflow: hidden;
         }
@@ -63,33 +55,67 @@
         }
 
         .page-title {
-            color: white;
+            color: var(--dark-color);
             font-weight: 700;
             font-size: 2.5rem;
             margin-bottom: 0.5rem;
-            text-shadow: 0 2px 4px rgba(0,0,0,0.3);
+            text-shadow: none;
             text-align: center;
         }
 
         .page-subtitle {
-            color: rgba(255,255,255,0.9);
+            color: rgba(0, 0, 0, 0.7);
             font-size: 1.1rem;
             margin-bottom: 3rem;
             text-align: center;
         }
 
+        .profile-image-section {
+            text-align: center;
+            margin-bottom: 2rem;
+            position: relative;
+            display: inline-block;
+        }
+
         .profile-avatar {
-            width: 120px;
-            height: 120px;
+            width: 150px;
+            height: 150px;
             border-radius: 50%;
-            border: 5px solid rgba(76, 132, 255, 0.2);
+            border: 4px solid var(--primary-color);
             transition: all 0.3s ease;
             object-fit: cover;
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.2);
         }
 
         .profile-avatar:hover {
             transform: scale(1.05);
-            border-color: var(--primary-color);
+            box-shadow: 0 8px 25px rgba(0, 0, 0, 0.3);
+        }
+
+        .profile-image-upload {
+            position: absolute;
+            bottom: 0;
+            right: 0;
+            background: var(--primary-color);
+            color: white;
+            width: 40px;
+            height: 40px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            box-shadow: 0 2px 10px rgba(0, 0, 0, 0.2);
+        }
+
+        .profile-image-upload:hover {
+            transform: scale(1.1);
+            background: #5a6fd8;
+        }
+
+        .profile-image-upload input[type="file"] {
+            display: none;
         }
 
         .form-control, .form-select {
@@ -242,7 +268,7 @@
                     <div class="main-card">
                         <!-- Profile Photo Section -->
                         <div class="text-center mb-4">
-                            <img src="https://images.unsplash.com/photo-1494790108755-2616b612b786?w=120&h=120&fit=crop&crop=face" 
+                            <img src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcRuNhTZJTtkR6b-ADMhmzPvVwaLuLdz273wvQ&s" 
                                  alt="Profile Photo" class="profile-avatar mb-3">
                             <div>
                                 <button class="btn btn-outline-secondary me-2">
@@ -252,6 +278,8 @@
                                     <i class="fas fa-trash me-2"></i>Remove
                                 </button>
                             </div>
+                            <h4 class="mt-3 mb-1" style="color: var(--dark-color)">Sarah Johnson</h4>
+                            <p class="text-muted mb-3">@sarahj • Member since 2024</p>
                         </div>
 
                         <!-- Personal Information -->
@@ -426,6 +454,17 @@
 
         function goBack() {
             window.history.back();
+        }
+
+        function updateProfilePhoto(event) {
+            const file = event.target.files[0];
+            if (file) {
+                const reader = new FileReader();
+                reader.onload = function(e) {
+                    document.querySelector('.profile-avatar').src = e.target.result;
+                }
+                reader.readAsDataURL(file);
+            }
         }
     </script>
 </body>
