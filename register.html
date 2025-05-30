@@ -1,0 +1,275 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Register - Hubber</title>
+    <!-- Bootstrap CSS -->
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    <!-- Font Awesome -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+    <!-- Custom CSS -->
+    <link rel="stylesheet" href="styles.css">
+    <style>
+        .register-container {
+            min-height: 100vh;
+            background: linear-gradient(135deg, var(--primary-color), var(--dark-color));
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            padding: 2rem;
+        }
+
+        .register-card {
+            background: white;
+            border-radius: 20px;
+            padding: 2rem;
+            width: 100%;
+            max-width: 500px;
+            box-shadow: 0 15px 35px rgba(0, 0, 0, 0.2);
+        }
+
+        .register-header {
+            text-align: center;
+            margin-bottom: 2rem;
+        }
+
+        .register-header i {
+            font-size: 3rem;
+            color: var(--primary-color);
+            margin-bottom: 1rem;
+        }
+
+        .form-control {
+            border-radius: 10px;
+            padding: 0.75rem 1rem;
+            margin-bottom: 1rem;
+        }
+
+        .btn-register {
+            width: 100%;
+            padding: 0.75rem;
+            border-radius: 10px;
+            font-weight: 600;
+            margin-top: 1rem;
+        }
+
+        .role-selector {
+            display: flex;
+            gap: 1rem;
+            margin-bottom: 1.5rem;
+        }
+
+        .role-option {
+            flex: 1;
+            text-align: center;
+            padding: 1rem;
+            border: 2px solid #e9ecef;
+            border-radius: 10px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+
+        .role-option:hover {
+            border-color: var(--primary-color);
+        }
+
+        .role-option.active {
+            border-color: var(--primary-color);
+            background-color: rgba(76, 132, 255, 0.1);
+        }
+
+        .role-option i {
+            font-size: 1.5rem;
+            margin-bottom: 0.5rem;
+            color: var(--primary-color);
+        }
+
+        .driver-fields {
+            display: none;
+        }
+
+        .driver-fields.active {
+            display: block;
+            animation: fadeIn 0.3s ease-out;
+        }
+    </style>
+</head>
+<body>
+    <div class="register-container">
+        <div class="register-card">
+            <div class="register-header">
+                <i class="fas fa-car-side"></i>
+                <h2>Create Account</h2>
+                <p class="text-muted">Join the Hubber community today</p>
+            </div>
+
+            <form>
+                <div class="role-selector">
+                    <div class="role-option active" onclick="selectRole(this, 'passenger')">
+                        <i class="fas fa-user"></i>
+                        <div>Passenger</div>
+                    </div>
+                    <div class="role-option" onclick="selectRole(this, 'driver')">
+                        <i class="fas fa-car"></i>
+                        <div>Driver</div>
+                    </div>
+                </div>
+
+                <!-- Common Fields -->
+                <div class="row">
+                    <div class="col-md-6">
+                        <div class="form-group">
+                            <input type="text" class="form-control" placeholder="First Name" required>
+                        </div>
+                    </div>
+                    <div class="col-md-6">
+                        <div class="form-group">
+                            <input type="text" class="form-control" placeholder="Last Name" required>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="form-group">
+                    <input type="email" class="form-control" placeholder="Email address" required>
+                </div>
+
+                <div class="form-group">
+                    <input type="tel" class="form-control" placeholder="Phone number" required>
+                </div>
+
+                <div class="row">
+                    <div class="col-md-6">
+                        <div class="form-group">
+                            <input type="password" class="form-control" placeholder="Password" required>
+                        </div>
+                    </div>
+                    <div class="col-md-6">
+                        <div class="form-group">
+                            <input type="password" class="form-control" placeholder="Confirm Password" required>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Passenger-specific Fields -->
+                <div class="passenger-fields">
+                    <hr>
+                    <h5 class="mb-3">Additional Information</h5>
+                    <div class="form-group">
+                        <input type="text" class="form-control" placeholder="Emergency Contact Name">
+                    </div>
+                    <div class="form-group">
+                        <input type="tel" class="form-control" placeholder="Emergency Contact Phone">
+                    </div>
+                    <div class="form-group">
+                        <select class="form-control">
+                            <option value="">Preferred Payment Method</option>
+                            <option value="credit_card">Credit Card</option>
+                            <option value="debit_card">Debit Card</option>
+                            <option value="paypal">PayPal</option>
+                        </select>
+                    </div>
+                </div>
+
+                <!-- Driver-specific Fields -->
+                <div class="driver-fields">
+                    <hr>
+                    <h5 class="mb-3">Vehicle Information</h5>
+                    <div class="row">
+                        <div class="col-md-6">
+                            <div class="form-group">
+                                <input type="text" class="form-control" placeholder="Vehicle Make">
+                            </div>
+                        </div>
+                        <div class="col-md-6">
+                            <div class="form-group">
+                                <input type="text" class="form-control" placeholder="Vehicle Model">
+                            </div>
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="col-md-6">
+                            <div class="form-group">
+                                <input type="text" class="form-control" placeholder="License Plate">
+                            </div>
+                        </div>
+                        <div class="col-md-6">
+                            <div class="form-group">
+                                <select class="form-control">
+                                    <option value="">Vehicle Type</option>
+                                    <option value="sedan">Sedan</option>
+                                    <option value="suv">SUV</option>
+                                    <option value="van">Van</option>
+                                </select>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <input type="text" class="form-control" placeholder="Driver's License Number">
+                    </div>
+                    <div class="form-group">
+                        <input type="date" class="form-control" placeholder="Driver's License Expiry Date">
+                    </div>
+                    <div class="form-group">
+                        <input type="text" class="form-control" placeholder="Insurance Policy Number">
+                    </div>
+                    <div class="form-group">
+                        <select class="form-control">
+                            <option value="">Years of Driving Experience</option>
+                            <option value="1-2">1-2 years</option>
+                            <option value="3-5">3-5 years</option>
+                            <option value="5+">5+ years</option>
+                        </select>
+                    </div>
+                </div>
+
+                <div class="form-check mb-3">
+                    <input type="checkbox" class="form-check-input" id="terms" required>
+                    <label class="form-check-label" for="terms">
+                        I agree to the <a href="#" class="text-primary">Terms of Service</a> and <a href="#" class="text-primary">Privacy Policy</a>
+                    </label>
+                </div>
+
+                <button type="submit" class="btn btn-primary btn-register">Create Account</button>
+            </form>
+
+            <div class="text-center mt-3">
+                <p class="mb-0">Already have an account? <a href="login.html" class="text-primary">Sign In</a></p>
+            </div>
+        </div>
+    </div>
+
+    <!-- Bootstrap JS -->
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+    <script>
+        function selectRole(element, role) {
+            // Remove active class from all options
+            document.querySelectorAll('.role-option').forEach(option => {
+                option.classList.remove('active');
+            });
+            // Add active class to selected option
+            element.classList.add('active');
+
+            // Toggle fields based on role
+            const driverFields = document.querySelector('.driver-fields');
+            const passengerFields = document.querySelector('.passenger-fields');
+            
+            if (role === 'driver') {
+                driverFields.style.display = 'block';
+                passengerFields.style.display = 'none';
+            } else {
+                driverFields.style.display = 'none';
+                passengerFields.style.display = 'block';
+            }
+        }
+
+        // Initialize the form with passenger fields shown
+        document.addEventListener('DOMContentLoaded', function() {
+            const driverFields = document.querySelector('.driver-fields');
+            const passengerFields = document.querySelector('.passenger-fields');
+            driverFields.style.display = 'none';
+            passengerFields.style.display = 'block';
+        });
+    </script>
+</body>
+</html> 

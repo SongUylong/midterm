@@ -1,0 +1,170 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Login - Hubber</title>
+    <!-- Bootstrap CSS -->
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    <!-- Font Awesome -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+    <!-- Custom CSS -->
+    <link rel="stylesheet" href="styles.css">
+    <style>
+        .login-container {
+            min-height: 100vh;
+            background: linear-gradient(135deg, var(--primary-color), var(--dark-color));
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            padding: 2rem;
+        }
+
+        .login-card {
+            background: white;
+            border-radius: 20px;
+            padding: 2rem;
+            width: 100%;
+            max-width: 400px;
+            box-shadow: 0 15px 35px rgba(0, 0, 0, 0.2);
+        }
+
+        .login-header {
+            text-align: center;
+            margin-bottom: 2rem;
+        }
+
+        .login-header i {
+            font-size: 3rem;
+            color: var(--primary-color);
+            margin-bottom: 1rem;
+        }
+
+        .form-control {
+            border-radius: 10px;
+            padding: 0.75rem 1rem;
+            margin-bottom: 1rem;
+        }
+
+        .btn-login {
+            width: 100%;
+            padding: 0.75rem;
+            border-radius: 10px;
+            font-weight: 600;
+            margin-top: 1rem;
+        }
+
+        .role-selector {
+            display: flex;
+            gap: 1rem;
+            margin-bottom: 1.5rem;
+        }
+
+        .role-option {
+            flex: 1;
+            text-align: center;
+            padding: 1rem;
+            border: 2px solid #e9ecef;
+            border-radius: 10px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+
+        .role-option:hover {
+            border-color: var(--primary-color);
+        }
+
+        .role-option.active {
+            border-color: var(--primary-color);
+            background-color: rgba(76, 132, 255, 0.1);
+        }
+
+        .role-option i {
+            font-size: 1.5rem;
+            margin-bottom: 0.5rem;
+            color: var(--primary-color);
+        }
+
+        .register-link {
+            text-align: center;
+            margin-top: 1.5rem;
+        }
+
+        .back-to-home {
+            position: absolute;
+            top: 1rem;
+            left: 1rem;
+            color: white;
+            text-decoration: none;
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+            transition: all 0.3s ease;
+        }
+
+        .back-to-home:hover {
+            color: rgba(255, 255, 255, 0.8);
+        }
+    </style>
+</head>
+<body>
+    <a href="index.html" class="back-to-home">
+        <i class="fas fa-arrow-left"></i> Back to Home
+    </a>
+    
+    <div class="login-container">
+        <div class="login-card">
+            <div class="login-header">
+                <i class="fas fa-car-side"></i>
+                <h2>Welcome Back</h2>
+                <p class="text-muted">Sign in to continue to Hubber</p>
+            </div>
+
+            <form action="rides.html">
+                <div class="role-selector">
+                    <div class="role-option active" onclick="selectRole(this, 'passenger')">
+                        <i class="fas fa-user"></i>
+                        <div>Passenger</div>
+                    </div>
+                    <div class="role-option" onclick="selectRole(this, 'driver')">
+                        <i class="fas fa-car"></i>
+                        <div>Driver</div>
+                    </div>
+                </div>
+
+                <div class="form-group">
+                    <input type="email" class="form-control" placeholder="Email address" required>
+                </div>
+                <div class="form-group">
+                    <input type="password" class="form-control" placeholder="Password" required>
+                </div>
+                <div class="d-flex justify-content-between align-items-center mb-3">
+                    <div class="form-check">
+                        <input type="checkbox" class="form-check-input" id="remember">
+                        <label class="form-check-label" for="remember">Remember me</label>
+                    </div>
+                    <a href="#" class="text-primary">Forgot password?</a>
+                </div>
+                <button type="submit" class="btn btn-primary btn-login">Sign In</button>
+            </form>
+
+            <div class="register-link">
+                <p class="mb-0">Don't have an account? <a href="register.html" class="text-primary">Register</a></p>
+            </div>
+        </div>
+    </div>
+
+    <!-- Bootstrap JS -->
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+    <script>
+        function selectRole(element, role) {
+            // Remove active class from all options
+            document.querySelectorAll('.role-option').forEach(option => {
+                option.classList.remove('active');
+            });
+            // Add active class to selected option
+            element.classList.add('active');
+        }
+    </script>
+</body>
+</html> 

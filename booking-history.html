@@ -1,0 +1,701 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Booking History - Hubber</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+    <link rel="stylesheet" href="styles.css">
+    <style>
+        .booking-card {
+            border-left: 4px solid #e9ecef;
+            transition: all 0.3s ease;
+        }
+        .booking-card.completed {
+            border-left-color: #28a745;
+        }
+        .booking-card.upcoming {
+            border-left-color: #007bff;
+        }
+        .booking-card.cancelled {
+            border-left-color: #dc3545;
+        }
+        .booking-card:hover {
+            box-shadow: 0 4px 15px rgba(0,0,0,0.1);
+            transform: translateY(-2px);
+        }
+        .route-indicator {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+        .route-dot {
+            width: 8px;
+            height: 8px;
+            border-radius: 50%;
+            flex-shrink: 0;
+        }
+        .route-line {
+            flex: 1;
+            height: 1px;
+            background: linear-gradient(to right, #28a745, #dc3545);
+        }
+        .rating-stars {
+            color: #ffc107;
+        }
+        .rating-stars .far {
+            color: #e9ecef;
+        }
+        .filter-card {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            border-radius: 15px;
+        }
+    </style>
+</head>
+<body>
+    <!-- Navigation -->
+    <nav class="navbar navbar-expand-lg navbar-dark fixed-top">
+        <div class="container">
+            <a class="navbar-brand" href="index.html">
+                <i class="fas fa-car-side"></i> Hubber
+            </a>
+            <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav">
+                <span class="navbar-toggler-icon"></span>
+            </button>
+            <div class="collapse navbar-collapse" id="navbarNav">
+                <ul class="navbar-nav ms-auto">
+                    <li class="nav-item">
+                        <a class="nav-link" href="passenger-dashboard.html">Dashboard</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="rides.html">Find Rides</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link active" href="booking-history.html">Bookings</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="passenger-profile.html">Profile</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="index.html">Logout</a>
+                    </li>
+                </ul>
+            </div>
+        </div>
+    </nav>
+
+    <div class="container" style="margin-top: 100px; margin-bottom: 50px;">
+        <!-- Page Header -->
+        <div class="row mb-4">
+            <div class="col-md-8">
+                <h2><i class="fas fa-history"></i> Booking History</h2>
+                <p class="text-muted">Manage your past and upcoming rides</p>
+            </div>
+            <div class="col-md-4 text-end">
+                <button class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#bookingStatsModal">
+                    <i class="fas fa-chart-bar"></i> View Statistics
+                </button>
+            </div>
+        </div>
+
+        <div class="row">
+            <!-- Filters Sidebar -->
+            <div class="col-md-3">
+                <div class="filter-card p-4 mb-4">
+                    <h5><i class="fas fa-filter"></i> Filters</h5>
+                    
+                    <div class="mb-3">
+                        <label for="statusFilter" class="form-label">Status</label>
+                        <select class="form-control" id="statusFilter" onchange="filterBookings()">
+                            <option value="all">All Bookings</option>
+                            <option value="upcoming">Upcoming</option>
+                            <option value="completed">Completed</option>
+                            <option value="cancelled">Cancelled</option>
+                        </select>
+                    </div>
+
+                    <div class="mb-3">
+                        <label for="dateRange" class="form-label">Date Range</label>
+                        <select class="form-control" id="dateRange" onchange="filterBookings()">
+                            <option value="all">All Time</option>
+                            <option value="this-week">This Week</option>
+                            <option value="this-month">This Month</option>
+                            <option value="last-3-months">Last 3 Months</option>
+                            <option value="this-year">This Year</option>
+                        </select>
+                    </div>
+
+                    <div class="mb-3">
+                        <label for="rideType" class="form-label">Ride Type</label>
+                        <select class="form-control" id="rideType" onchange="filterBookings()">
+                            <option value="all">All Types</option>
+                            <option value="shared">Shared</option>
+                            <option value="exclusive">Exclusive</option>
+                        </select>
+                    </div>
+
+                    <button class="btn btn-light w-100" onclick="clearFilters()">
+                        <i class="fas fa-times"></i> Clear Filters
+                    </button>
+                </div>
+
+                <!-- Quick Stats -->
+                <div class="card">
+                    <div class="card-body">
+                        <h6><i class="fas fa-chart-line"></i> Quick Stats</h6>
+                        <div class="row text-center">
+                            <div class="col-6">
+                                <h5 class="text-primary">24</h5>
+                                <small>Total Rides</small>
+                            </div>
+                            <div class="col-6">
+                                <h5 class="text-success">$487</h5>
+                                <small>Total Spent</small>
+                            </div>
+                        </div>
+                        <hr>
+                        <div class="row text-center">
+                            <div class="col-6">
+                                <h5 class="text-info">4.8</h5>
+                                <small>Avg Rating</small>
+                            </div>
+                            <div class="col-6">
+                                <h5 class="text-warning">3</h5>
+                                <small>This Month</small>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Bookings List -->
+            <div class="col-md-9">
+                <div id="bookingsList">
+                    <!-- Upcoming Booking -->
+                    <div class="card booking-card upcoming mb-3" data-status="upcoming" data-type="shared">
+                        <div class="card-body">
+                            <div class="row">
+                                <div class="col-md-8">
+                                    <div class="d-flex justify-content-between align-items-start mb-3">
+                                        <div>
+                                            <h6 class="mb-1">Booking #HUB-2024-003</h6>
+                                            <span class="badge bg-primary">Upcoming</span>
+                                            <span class="badge bg-info ms-1">Shared</span>
+                                        </div>
+                                        <div class="text-end">
+                                            <h6 class="text-primary mb-0">$42.50</h6>
+                                            <small class="text-muted">Dec 28, 2023</small>
+                                        </div>
+                                    </div>
+
+                                    <div class="route-info mb-3">
+                                        <div class="route-indicator mb-2">
+                                            <div class="route-dot bg-success"></div>
+                                            <div class="route-line"></div>
+                                            <div class="route-dot bg-danger"></div>
+                                        </div>
+                                        <div class="d-flex justify-content-between">
+                                            <div>
+                                                <strong>Downtown Station</strong><br>
+                                                <small class="text-muted">8:30 AM</small>
+                                            </div>
+                                            <div class="text-end">
+                                                <strong>Airport Terminal</strong><br>
+                                                <small class="text-muted">10:00 AM</small>
+                                            </div>
+                                        </div>
+                                    </div>
+
+                                    <div class="driver-info d-flex align-items-center">
+                                        <img src="https://images.unsplash.com/photo-1472099645785-5658abf4ff4e?w=40&h=40&fit=crop&crop=face" class="rounded-circle me-2" width="40" height="40" alt="Driver">
+                                        <div>
+                                            <strong>Mike Driver</strong><br>
+                                            <small class="text-muted">2022 Toyota Camry • ABC-1234</small>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="col-md-4 text-end">
+                                    <div class="d-grid gap-2">
+                                        <button class="btn btn-outline-primary btn-sm" onclick="viewBookingDetails('HUB-2024-003')">
+                                            <i class="fas fa-eye"></i> View Details
+                                        </button>
+                                        <button class="btn btn-outline-warning btn-sm" onclick="editBooking('HUB-2024-003')">
+                                            <i class="fas fa-edit"></i> Modify
+                                        </button>
+                                        <button class="btn btn-outline-danger btn-sm" onclick="cancelBooking('HUB-2024-003')">
+                                            <i class="fas fa-times"></i> Cancel
+                                        </button>
+                                        <button class="btn btn-success btn-sm" onclick="contactDriver('HUB-2024-003')">
+                                            <i class="fas fa-phone"></i> Contact Driver
+                                        </button>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Completed Booking -->
+                    <div class="card booking-card completed mb-3" data-status="completed" data-type="exclusive">
+                        <div class="card-body">
+                            <div class="row">
+                                <div class="col-md-8">
+                                    <div class="d-flex justify-content-between align-items-start mb-3">
+                                        <div>
+                                            <h6 class="mb-1">Booking #HUB-2024-002</h6>
+                                            <span class="badge bg-success">Completed</span>
+                                            <span class="badge bg-warning text-dark ms-1">Exclusive</span>
+                                        </div>
+                                        <div class="text-end">
+                                            <h6 class="text-success mb-0">$65.00</h6>
+                                            <small class="text-muted">Dec 20, 2023</small>
+                                        </div>
+                                    </div>
+
+                                    <div class="route-info mb-3">
+                                        <div class="route-indicator mb-2">
+                                            <div class="route-dot bg-success"></div>
+                                            <div class="route-line"></div>
+                                            <div class="route-dot bg-danger"></div>
+                                        </div>
+                                        <div class="d-flex justify-content-between">
+                                            <div>
+                                                <strong>Home</strong><br>
+                                                <small class="text-muted">2:00 PM</small>
+                                            </div>
+                                            <div class="text-end">
+                                                <strong>Shopping Mall</strong><br>
+                                                <small class="text-muted">2:45 PM</small>
+                                            </div>
+                                        </div>
+                                    </div>
+
+                                    <div class="driver-info d-flex align-items-center mb-2">
+                                        <img src="https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?w=40&h=40&fit=crop&crop=face" class="rounded-circle me-2" width="40" height="40" alt="Driver">
+                                        <div>
+                                            <strong>Sarah Wilson</strong><br>
+                                            <small class="text-muted">2021 Honda Accord • XYZ-5678</small>
+                                        </div>
+                                    </div>
+
+                                    <div class="rating-section">
+                                        <span class="me-2">Your rating:</span>
+                                        <div class="rating-stars d-inline">
+                                            <i class="fas fa-star"></i>
+                                            <i class="fas fa-star"></i>
+                                            <i class="fas fa-star"></i>
+                                            <i class="fas fa-star"></i>
+                                            <i class="fas fa-star"></i>
+                                        </div>
+                                        <small class="text-muted ms-2">(5.0)</small>
+                                    </div>
+                                </div>
+                                <div class="col-md-4 text-end">
+                                    <div class="d-grid gap-2">
+                                        <button class="btn btn-outline-primary btn-sm" onclick="viewBookingDetails('HUB-2024-002')">
+                                            <i class="fas fa-eye"></i> View Details
+                                        </button>
+                                        <button class="btn btn-outline-info btn-sm" onclick="downloadReceipt('HUB-2024-002')">
+                                            <i class="fas fa-download"></i> Receipt
+                                        </button>
+                                        <button class="btn btn-outline-success btn-sm" onclick="bookAgain('HUB-2024-002')">
+                                            <i class="fas fa-redo"></i> Book Again
+                                        </button>
+                                        <button class="btn btn-outline-secondary btn-sm" onclick="reportIssue('HUB-2024-002')">
+                                            <i class="fas fa-flag"></i> Report Issue
+                                        </button>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Completed Booking Pending Rating -->
+                    <div class="card booking-card completed mb-3" data-status="completed" data-type="shared">
+                        <div class="card-body">
+                            <div class="row">
+                                <div class="col-md-8">
+                                    <div class="d-flex justify-content-between align-items-start mb-3">
+                                        <div>
+                                            <h6 class="mb-1">Booking #HUB-2024-001</h6>
+                                            <span class="badge bg-success">Completed</span>
+                                            <span class="badge bg-info ms-1">Shared</span>
+                                            <span class="badge bg-warning text-dark ms-1">Rate Pending</span>
+                                        </div>
+                                        <div class="text-end">
+                                            <h6 class="text-success mb-0">$28.75</h6>
+                                            <small class="text-muted">Dec 15, 2023</small>
+                                        </div>
+                                    </div>
+
+                                    <div class="route-info mb-3">
+                                        <div class="route-indicator mb-2">
+                                            <div class="route-dot bg-success"></div>
+                                            <div class="route-line"></div>
+                                            <div class="route-dot bg-danger"></div>
+                                        </div>
+                                        <div class="d-flex justify-content-between">
+                                            <div>
+                                                <strong>Office Building</strong><br>
+                                                <small class="text-muted">6:00 PM</small>
+                                            </div>
+                                            <div class="text-end">
+                                                <strong>Train Station</strong><br>
+                                                <small class="text-muted">6:30 PM</small>
+                                            </div>
+                                        </div>
+                                    </div>
+
+                                    <div class="driver-info d-flex align-items-center">
+                                        <img src="https://images.unsplash.com/photo-1566492031773-4f4e44671d66?w=40&h=40&fit=crop&crop=face" class="rounded-circle me-2" width="40" height="40" alt="Driver">
+                                        <div>
+                                            <strong>James Rodriguez</strong><br>
+                                            <small class="text-muted">2020 Nissan Altima • DEF-9012</small>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="col-md-4 text-end">
+                                    <div class="d-grid gap-2">
+                                        <button class="btn btn-warning btn-sm" onclick="rateRide('HUB-2024-001')" data-bs-toggle="modal" data-bs-target="#ratingModal">
+                                            <i class="fas fa-star"></i> Rate Ride
+                                        </button>
+                                        <button class="btn btn-outline-primary btn-sm" onclick="viewBookingDetails('HUB-2024-001')">
+                                            <i class="fas fa-eye"></i> View Details
+                                        </button>
+                                        <button class="btn btn-outline-info btn-sm" onclick="downloadReceipt('HUB-2024-001')">
+                                            <i class="fas fa-download"></i> Receipt
+                                        </button>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Cancelled Booking -->
+                    <div class="card booking-card cancelled mb-3" data-status="cancelled" data-type="shared">
+                        <div class="card-body">
+                            <div class="row">
+                                <div class="col-md-8">
+                                    <div class="d-flex justify-content-between align-items-start mb-3">
+                                        <div>
+                                            <h6 class="mb-1">Booking #HUB-2023-099</h6>
+                                            <span class="badge bg-danger">Cancelled</span>
+                                            <span class="badge bg-info ms-1">Shared</span>
+                                        </div>
+                                        <div class="text-end">
+                                            <h6 class="text-muted mb-0">$35.20</h6>
+                                            <small class="text-muted">Dec 10, 2023</small>
+                                        </div>
+                                    </div>
+
+                                    <div class="route-info mb-3">
+                                        <div class="route-indicator mb-2">
+                                            <div class="route-dot bg-secondary"></div>
+                                            <div class="route-line" style="background: #6c757d;"></div>
+                                            <div class="route-dot bg-secondary"></div>
+                                        </div>
+                                        <div class="d-flex justify-content-between">
+                                            <div>
+                                                <strong>Airport</strong><br>
+                                                <small class="text-muted">10:00 AM</small>
+                                            </div>
+                                            <div class="text-end">
+                                                <strong>City Center</strong><br>
+                                                <small class="text-muted">11:30 AM</small>
+                                            </div>
+                                        </div>
+                                    </div>
+
+                                    <div class="cancellation-info">
+                                        <small class="text-muted">
+                                            <i class="fas fa-info-circle"></i>
+                                            Cancelled by driver due to vehicle issue. Full refund processed.
+                                        </small>
+                                    </div>
+                                </div>
+                                <div class="col-md-4 text-end">
+                                    <div class="d-grid gap-2">
+                                        <button class="btn btn-outline-primary btn-sm" onclick="viewBookingDetails('HUB-2023-099')">
+                                            <i class="fas fa-eye"></i> View Details
+                                        </button>
+                                        <button class="btn btn-outline-success btn-sm" onclick="bookAgain('HUB-2023-099')">
+                                            <i class="fas fa-redo"></i> Book Again
+                                        </button>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- No Results -->
+                <div id="noResults" class="text-center py-5" style="display: none;">
+                    <i class="fas fa-search fa-3x text-muted mb-3"></i>
+                    <h5 class="text-muted">No bookings found</h5>
+                    <p class="text-muted">Try adjusting your filters or book a new ride.</p>
+                    <a href="rides.html" class="btn btn-primary">Find Rides</a>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Rating Modal -->
+    <div class="modal fade" id="ratingModal" tabindex="-1">
+        <div class="modal-dialog modal-dialog-centered">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title">Rate Your Ride</h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+                </div>
+                <div class="modal-body">
+                    <div class="text-center mb-4">
+                        <img src="https://images.unsplash.com/photo-1566492031773-4f4e44671d66?w=80&h=80&fit=crop&crop=face" class="rounded-circle mb-3" width="80" height="80" alt="Driver">
+                        <h6>James Rodriguez</h6>
+                        <small class="text-muted">2020 Nissan Altima</small>
+                    </div>
+
+                    <div class="text-center mb-4">
+                        <h6>How was your ride?</h6>
+                        <div class="rating-input">
+                            <i class="fas fa-star rating-star" data-rating="1"></i>
+                            <i class="fas fa-star rating-star" data-rating="2"></i>
+                            <i class="fas fa-star rating-star" data-rating="3"></i>
+                            <i class="fas fa-star rating-star" data-rating="4"></i>
+                            <i class="fas fa-star rating-star" data-rating="5"></i>
+                        </div>
+                        <small class="text-muted d-block mt-2">Tap to rate</small>
+                    </div>
+
+                    <div class="mb-3">
+                        <label for="ratingComment" class="form-label">Additional Comments (Optional)</label>
+                        <textarea class="form-control" id="ratingComment" rows="3" placeholder="Share your experience..."></textarea>
+                    </div>
+
+                    <div class="mb-3">
+                        <label class="form-label">Rate specific aspects:</label>
+                        <div class="row">
+                            <div class="col-6">
+                                <div class="form-check">
+                                    <input class="form-check-input" type="checkbox" id="punctual">
+                                    <label class="form-check-label" for="punctual">Punctual</label>
+                                </div>
+                                <div class="form-check">
+                                    <input class="form-check-input" type="checkbox" id="friendly">
+                                    <label class="form-check-label" for="friendly">Friendly</label>
+                                </div>
+                            </div>
+                            <div class="col-6">
+                                <div class="form-check">
+                                    <input class="form-check-input" type="checkbox" id="cleanCar">
+                                    <label class="form-check-label" for="cleanCar">Clean Car</label>
+                                </div>
+                                <div class="form-check">
+                                    <input class="form-check-input" type="checkbox" id="safeDriving">
+                                    <label class="form-check-label" for="safeDriving">Safe Driving</label>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Skip</button>
+                    <button type="button" class="btn btn-primary" onclick="submitRating()">Submit Rating</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Booking Statistics Modal -->
+    <div class="modal fade" id="bookingStatsModal" tabindex="-1">
+        <div class="modal-dialog modal-lg">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title">Booking Statistics</h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+                </div>
+                <div class="modal-body">
+                    <div class="row">
+                        <div class="col-md-6">
+                            <div class="card">
+                                <div class="card-body text-center">
+                                    <h3 class="text-primary">24</h3>
+                                    <p>Total Rides</p>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-md-6">
+                            <div class="card">
+                                <div class="card-body text-center">
+                                    <h3 class="text-success">$487.50</h3>
+                                    <p>Total Spent</p>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="row mt-3">
+                        <div class="col-md-6">
+                            <div class="card">
+                                <div class="card-body text-center">
+                                    <h3 class="text-info">4.8</h3>
+                                    <p>Average Rating Given</p>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-md-6">
+                            <div class="card">
+                                <div class="card-body text-center">
+                                    <h3 class="text-warning">3</h3>
+                                    <p>Rides This Month</p>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="row mt-3">
+                        <div class="col-12">
+                            <h6>Ride Type Distribution</h6>
+                            <div class="progress mb-2">
+                                <div class="progress-bar bg-info" style="width: 65%">Shared (65%)</div>
+                                <div class="progress-bar bg-warning" style="width: 35%">Exclusive (35%)</div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="row mt-3">
+                        <div class="col-12">
+                            <h6>Monthly Spending</h6>
+                            <canvas id="spendingChart" width="400" height="200"></canvas>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+    <script>
+        let selectedRating = 0;
+
+        // Rating functionality
+        document.querySelectorAll('.rating-star').forEach(star => {
+            star.addEventListener('click', function() {
+                selectedRating = parseInt(this.dataset.rating);
+                updateRatingDisplay();
+            });
+        });
+
+        function updateRatingDisplay() {
+            document.querySelectorAll('.rating-star').forEach((star, index) => {
+                if (index < selectedRating) {
+                    star.style.color = '#ffc107';
+                } else {
+                    star.style.color = '#e9ecef';
+                }
+            });
+        }
+
+        function submitRating() {
+            if (selectedRating === 0) {
+                alert('Please select a rating');
+                return;
+            }
+            
+            alert(`Rating submitted: ${selectedRating} stars`);
+            const modal = bootstrap.Modal.getInstance(document.getElementById('ratingModal'));
+            modal.hide();
+            
+            // Update the booking card to show rating
+            // This would typically update the database
+        }
+
+        // Filter functionality
+        function filterBookings() {
+            const status = document.getElementById('statusFilter').value;
+            const dateRange = document.getElementById('dateRange').value;
+            const rideType = document.getElementById('rideType').value;
+            
+            const bookings = document.querySelectorAll('.booking-card');
+            let visibleCount = 0;
+            
+            bookings.forEach(booking => {
+                let show = true;
+                
+                if (status !== 'all' && !booking.classList.contains(status)) {
+                    show = false;
+                }
+                
+                if (rideType !== 'all' && booking.dataset.type !== rideType) {
+                    show = false;
+                }
+                
+                if (show) {
+                    booking.style.display = 'block';
+                    visibleCount++;
+                } else {
+                    booking.style.display = 'none';
+                }
+            });
+            
+            // Show/hide no results message
+            document.getElementById('noResults').style.display = visibleCount === 0 ? 'block' : 'none';
+        }
+
+        function clearFilters() {
+            document.getElementById('statusFilter').value = 'all';
+            document.getElementById('dateRange').value = 'all';
+            document.getElementById('rideType').value = 'all';
+            filterBookings();
+        }
+
+        // Booking actions
+        function viewBookingDetails(bookingId) {
+            alert(`Viewing details for booking: ${bookingId}`);
+        }
+
+        function editBooking(bookingId) {
+            alert(`Editing booking: ${bookingId}`);
+        }
+
+        function cancelBooking(bookingId) {
+            if (confirm('Are you sure you want to cancel this booking?')) {
+                alert(`Booking ${bookingId} cancelled`);
+                // Update UI to show cancelled status
+            }
+        }
+
+        function contactDriver(bookingId) {
+            alert(`Contacting driver for booking: ${bookingId}`);
+        }
+
+        function downloadReceipt(bookingId) {
+            alert(`Downloading receipt for booking: ${bookingId}`);
+        }
+
+        function bookAgain(bookingId) {
+            alert(`Booking again with same route from: ${bookingId}`);
+            window.location.href = 'rides.html';
+        }
+
+        function reportIssue(bookingId) {
+            alert(`Reporting issue for booking: ${bookingId}`);
+        }
+
+        function rateRide(bookingId) {
+            selectedRating = 0;
+            updateRatingDisplay();
+        }
+    </script>
+
+    <style>
+        .rating-star {
+            font-size: 2rem;
+            margin: 0 5px;
+            cursor: pointer;
+            color: #e9ecef;
+            transition: color 0.2s ease;
+        }
+        .rating-star:hover {
+            color: #ffc107;
+        }
+    </style>
+</body>
+</html> 

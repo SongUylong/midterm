@@ -1,0 +1,556 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Create Ride - Hubber</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+    <link rel="stylesheet" href="styles.css">
+    <style>
+        .route-input {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            border-radius: 15px;
+            padding: 25px;
+            margin-bottom: 20px;
+        }
+        .location-input {
+            border: 2px solid #e9ecef;
+            border-radius: 10px;
+            padding: 15px;
+            margin-bottom: 15px;
+            transition: border-color 0.3s ease;
+        }
+        .location-input:focus-within {
+            border-color: var(--primary-color);
+        }
+        .route-dot {
+            width: 12px;
+            height: 12px;
+            border-radius: 50%;
+            flex-shrink: 0;
+        }
+        .route-line {
+            width: 2px;
+            height: 30px;
+            background-color: rgba(255,255,255,0.3);
+            margin-left: 5px;
+        }
+        .pricing-card {
+            background: #f8f9fa;
+            border-radius: 15px;
+            padding: 20px;
+        }
+        .ride-type-option {
+            border: 2px solid #e9ecef;
+            border-radius: 10px;
+            padding: 20px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            margin-bottom: 15px;
+        }
+        .ride-type-option:hover {
+            border-color: var(--primary-color);
+            background-color: #f8f9ff;
+        }
+        .ride-type-option.selected {
+            border-color: var(--primary-color);
+            background-color: #f8f9ff;
+        }
+    </style>
+</head>
+<body>
+    <!-- Navigation -->
+    <nav class="navbar navbar-expand-lg navbar-dark fixed-top">
+        <div class="container">
+            <a class="navbar-brand" href="index.html">
+                <i class="fas fa-car-side"></i> Hubber
+            </a>
+            <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav">
+                <span class="navbar-toggler-icon"></span>
+            </button>
+            <div class="collapse navbar-collapse" id="navbarNav">
+                <ul class="navbar-nav ms-auto">
+                    <li class="nav-item">
+                        <a class="nav-link" href="driver-dashboard.html">Dashboard</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link active" href="create-ride.html">Create Ride</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="driver-profile.html">Profile</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="ride-history.html">Ride History</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="index.html">Logout</a>
+                    </li>
+                </ul>
+            </div>
+        </div>
+    </nav>
+
+    <div class="container" style="margin-top: 100px; margin-bottom: 50px;">
+        <div class="row">
+            <!-- Main Form -->
+            <div class="col-lg-8">
+                <div class="card">
+                    <div class="card-header">
+                        <h3><i class="fas fa-plus-circle"></i> Create New Ride</h3>
+                        <p class="text-muted mb-0">Share your journey and earn money</p>
+                    </div>
+                    <div class="card-body">
+                        <form id="createRideForm">
+                            <!-- Route Information -->
+                            <div class="route-input mb-4">
+                                <h5><i class="fas fa-route"></i> Route Details</h5>
+                                <div class="row">
+                                    <div class="col-md-6">
+                                        <div class="location-input">
+                                            <div class="d-flex align-items-center">
+                                                <div class="route-dot bg-success me-3"></div>
+                                                <div class="flex-grow-1">
+                                                    <label class="form-label text-white">Pickup Location</label>
+                                                    <input type="text" class="form-control" id="pickupLocation" placeholder="Enter pickup address" required>
+                                                    <small class="text-light">Where passengers can board</small>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="col-md-6">
+                                        <div class="location-input">
+                                            <div class="d-flex align-items-center">
+                                                <div class="route-dot bg-danger me-3"></div>
+                                                <div class="flex-grow-1">
+                                                    <label class="form-label text-white">Destination</label>
+                                                    <input type="text" class="form-control" id="destination" placeholder="Enter destination address" required>
+                                                    <small class="text-light">Final destination</small>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                                
+                                <!-- Additional Stops -->
+                                <div class="mt-3">
+                                    <button type="button" class="btn btn-outline-light btn-sm" onclick="addStop()">
+                                        <i class="fas fa-plus"></i> Add Stop
+                                    </button>
+                                    <div id="additionalStops"></div>
+                                </div>
+                            </div>
+
+                            <!-- Date and Time -->
+                            <div class="mb-4">
+                                <h5><i class="fas fa-calendar-alt"></i> Schedule</h5>
+                                <div class="row">
+                                    <div class="col-md-6 mb-3">
+                                        <label for="departureDate" class="form-label">Departure Date</label>
+                                        <input type="date" class="form-control" id="departureDate" required>
+                                    </div>
+                                    <div class="col-md-6 mb-3">
+                                        <label for="departureTime" class="form-label">Departure Time</label>
+                                        <input type="time" class="form-control" id="departureTime" required>
+                                    </div>
+                                </div>
+                                <div class="form-check">
+                                    <input class="form-check-input" type="checkbox" id="flexibleTime">
+                                    <label class="form-check-label" for="flexibleTime">
+                                        I'm flexible with departure time (±30 minutes)
+                                    </label>
+                                </div>
+                            </div>
+
+                            <!-- Ride Type -->
+                            <div class="mb-4">
+                                <h5><i class="fas fa-users"></i> Ride Type</h5>
+                                
+                                <div class="ride-type-option selected" data-type="shared">
+                                    <div class="d-flex align-items-center">
+                                        <input type="radio" name="rideType" value="shared" id="sharedRide" checked class="me-3">
+                                        <div class="flex-grow-1">
+                                            <h6 class="mb-1"><i class="fas fa-users text-primary"></i> Shared Ride</h6>
+                                            <p class="mb-0 text-muted">Share your car with other passengers. More affordable for passengers.</p>
+                                        </div>
+                                    </div>
+                                </div>
+
+                                <div class="ride-type-option" data-type="exclusive">
+                                    <div class="d-flex align-items-center">
+                                        <input type="radio" name="rideType" value="exclusive" id="exclusiveRide" class="me-3">
+                                        <div class="flex-grow-1">
+                                            <h6 class="mb-1"><i class="fas fa-crown text-warning"></i> Exclusive Ride</h6>
+                                            <p class="mb-0 text-muted">Private ride for one passenger or group. Higher earnings.</p>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <!-- Passenger Details -->
+                            <div id="passengerSection" class="mb-4">
+                                <h5><i class="fas fa-user-friends"></i> Passenger Information</h5>
+                                <div class="row">
+                                    <div class="col-md-6 mb-3">
+                                        <label for="availableSeats" class="form-label">Available Seats</label>
+                                        <select class="form-control" id="availableSeats" required>
+                                            <option value="">Select seats</option>
+                                            <option value="1">1 seat</option>
+                                            <option value="2">2 seats</option>
+                                            <option value="3">3 seats</option>
+                                            <option value="4">4 seats</option>
+                                        </select>
+                                    </div>
+                                    <div class="col-md-6 mb-3">
+                                        <label for="instantBooking" class="form-label">Booking Type</label>
+                                        <select class="form-control" id="instantBooking">
+                                            <option value="instant">Instant Booking</option>
+                                            <option value="approval">Requires Approval</option>
+                                        </select>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <!-- Pricing -->
+                            <div class="pricing-card mb-4">
+                                <h5><i class="fas fa-dollar-sign"></i> Pricing</h5>
+                                <div id="sharedPricing">
+                                    <div class="mb-3">
+                                        <label for="pricePerSeat" class="form-label">Price per Seat</label>
+                                        <div class="input-group">
+                                            <span class="input-group-text">$</span>
+                                            <input type="number" class="form-control" id="pricePerSeat" placeholder="25.00" step="0.01" min="1" required>
+                                        </div>
+                                        <small class="text-muted">Recommended: $15-50 per seat</small>
+                                    </div>
+                                </div>
+                                <div id="exclusivePricing" style="display: none;">
+                                    <div class="mb-3">
+                                        <label for="totalPrice" class="form-label">Total Price for Exclusive Ride</label>
+                                        <div class="input-group">
+                                            <span class="input-group-text">$</span>
+                                            <input type="number" class="form-control" id="totalPrice" placeholder="100.00" step="0.01" min="10">
+                                        </div>
+                                        <small class="text-muted">Price for the entire car</small>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <!-- Vehicle and Preferences -->
+                            <div class="mb-4">
+                                <h5><i class="fas fa-car"></i> Vehicle & Preferences</h5>
+                                <div class="row">
+                                    <div class="col-md-6 mb-3">
+                                        <label for="vehicleSelect" class="form-label">Select Vehicle</label>
+                                        <select class="form-control" id="vehicleSelect" required>
+                                            <option value="">Choose vehicle</option>
+                                            <option value="camry">2022 Toyota Camry (ABC-1234)</option>
+                                            <option value="accord">2021 Honda Accord (XYZ-5678)</option>
+                                        </select>
+                                    </div>
+                                    <div class="col-md-6 mb-3">
+                                        <label for="maxDetour" class="form-label">Maximum Detour</label>
+                                        <select class="form-control" id="maxDetour">
+                                            <option value="none">No detours</option>
+                                            <option value="5">Up to 5 minutes</option>
+                                            <option value="10" selected>Up to 10 minutes</option>
+                                            <option value="15">Up to 15 minutes</option>
+                                        </select>
+                                    </div>
+                                </div>
+                                
+                                <div class="mb-3">
+                                    <label class="form-label">Preferences</label>
+                                    <div class="row">
+                                        <div class="col-md-6">
+                                            <div class="form-check">
+                                                <input class="form-check-input" type="checkbox" id="allowMusic" checked>
+                                                <label class="form-check-label" for="allowMusic">Allow music</label>
+                                            </div>
+                                            <div class="form-check">
+                                                <input class="form-check-input" type="checkbox" id="allowFood" checked>
+                                                <label class="form-check-label" for="allowFood">Allow food & drinks</label>
+                                            </div>
+                                        </div>
+                                        <div class="col-md-6">
+                                            <div class="form-check">
+                                                <input class="form-check-input" type="checkbox" id="allowPets">
+                                                <label class="form-check-label" for="allowPets">Allow pets</label>
+                                            </div>
+                                            <div class="form-check">
+                                                <input class="form-check-input" type="checkbox" id="quietRide">
+                                                <label class="form-check-label" for="quietRide">Prefer quiet ride</label>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <!-- Additional Information -->
+                            <div class="mb-4">
+                                <h5><i class="fas fa-info-circle"></i> Additional Information</h5>
+                                <div class="mb-3">
+                                    <label for="rideDescription" class="form-label">Description (Optional)</label>
+                                    <textarea class="form-control" id="rideDescription" rows="3" placeholder="Any additional information for passengers..."></textarea>
+                                </div>
+                                <div class="mb-3">
+                                    <label for="meetingPoint" class="form-label">Specific Meeting Point (Optional)</label>
+                                    <input type="text" class="form-control" id="meetingPoint" placeholder="e.g., Main entrance, Parking lot A">
+                                    <small class="text-muted">Exact pickup location details</small>
+                                </div>
+                            </div>
+
+                            <!-- Submit Buttons -->
+                            <div class="d-grid gap-2 d-md-flex justify-content-md-end">
+                                <button type="button" class="btn btn-outline-secondary me-md-2" onclick="saveDraft()">
+                                    <i class="fas fa-save"></i> Save as Draft
+                                </button>
+                                <button type="submit" class="btn btn-primary">
+                                    <i class="fas fa-plus"></i> Create Ride
+                                </button>
+                            </div>
+                        </form>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Preview Sidebar -->
+            <div class="col-lg-4">
+                <div class="card">
+                    <div class="card-header">
+                        <h6><i class="fas fa-eye"></i> Ride Preview</h6>
+                    </div>
+                    <div class="card-body">
+                        <div id="ridePreview">
+                            <div class="text-center text-muted py-4">
+                                <i class="fas fa-car fa-3x mb-3"></i>
+                                <p>Fill in the form to see your ride preview</p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Tips Card -->
+                <div class="card mt-3">
+                    <div class="card-header">
+                        <h6><i class="fas fa-lightbulb"></i> Driver Tips</h6>
+                    </div>
+                    <div class="card-body">
+                        <ul class="list-unstyled">
+                            <li class="mb-2">
+                                <i class="fas fa-check text-success me-2"></i>
+                                Set competitive prices to attract passengers
+                            </li>
+                            <li class="mb-2">
+                                <i class="fas fa-check text-success me-2"></i>
+                                Be clear about pickup location
+                            </li>
+                            <li class="mb-2">
+                                <i class="fas fa-check text-success me-2"></i>
+                                Allow reasonable detours for better bookings
+                            </li>
+                            <li class="mb-2">
+                                <i class="fas fa-check text-success me-2"></i>
+                                Keep your vehicle clean and comfortable
+                            </li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Success Modal -->
+    <div class="modal fade" id="successModal" tabindex="-1">
+        <div class="modal-dialog modal-dialog-centered">
+            <div class="modal-content">
+                <div class="modal-body text-center py-5">
+                    <div class="mb-4">
+                        <i class="fas fa-check-circle text-success" style="font-size: 4rem;"></i>
+                    </div>
+                    <h3 class="text-success mb-3">Ride Created Successfully!</h3>
+                    <p class="mb-4">Your ride has been published and is now visible to passengers.</p>
+                    
+                    <div class="d-grid gap-2">
+                        <button type="button" class="btn btn-primary" onclick="goToDashboard()">
+                            Go to Dashboard
+                        </button>
+                        <button type="button" class="btn btn-outline-secondary" onclick="createAnother()">
+                            Create Another Ride
+                        </button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+    <script>
+        // Set minimum date to today
+        document.getElementById('departureDate').min = new Date().toISOString().split('T')[0];
+
+        // Ride type selection
+        document.querySelectorAll('.ride-type-option').forEach(option => {
+            option.addEventListener('click', function() {
+                document.querySelectorAll('.ride-type-option').forEach(o => o.classList.remove('selected'));
+                this.classList.add('selected');
+                this.querySelector('input[type="radio"]').checked = true;
+                
+                const rideType = this.dataset.type;
+                updatePricingSection(rideType);
+                updatePassengerSection(rideType);
+            });
+        });
+
+        function updatePricingSection(rideType) {
+            const sharedPricing = document.getElementById('sharedPricing');
+            const exclusivePricing = document.getElementById('exclusivePricing');
+            
+            if (rideType === 'shared') {
+                sharedPricing.style.display = 'block';
+                exclusivePricing.style.display = 'none';
+                document.getElementById('pricePerSeat').required = true;
+                document.getElementById('totalPrice').required = false;
+            } else {
+                sharedPricing.style.display = 'none';
+                exclusivePricing.style.display = 'block';
+                document.getElementById('pricePerSeat').required = false;
+                document.getElementById('totalPrice').required = true;
+            }
+        }
+
+        function updatePassengerSection(rideType) {
+            const passengerSection = document.getElementById('passengerSection');
+            const availableSeats = document.getElementById('availableSeats');
+            
+            if (rideType === 'exclusive') {
+                availableSeats.innerHTML = '<option value="all">Entire Car</option>';
+                availableSeats.value = 'all';
+            } else {
+                availableSeats.innerHTML = `
+                    <option value="">Select seats</option>
+                    <option value="1">1 seat</option>
+                    <option value="2">2 seats</option>
+                    <option value="3">3 seats</option>
+                    <option value="4">4 seats</option>
+                `;
+            }
+        }
+
+        // Add stop functionality
+        let stopCount = 0;
+        function addStop() {
+            stopCount++;
+            const stopsContainer = document.getElementById('additionalStops');
+            const stopDiv = document.createElement('div');
+            stopDiv.className = 'location-input mt-2';
+            stopDiv.innerHTML = `
+                <div class="d-flex align-items-center">
+                    <div class="route-dot bg-warning me-3"></div>
+                    <div class="flex-grow-1">
+                        <input type="text" class="form-control" placeholder="Stop ${stopCount}" name="stops[]">
+                    </div>
+                    <button type="button" class="btn btn-outline-danger btn-sm ms-2" onclick="removeStop(this)">
+                        <i class="fas fa-times"></i>
+                    </button>
+                </div>
+            `;
+            stopsContainer.appendChild(stopDiv);
+        }
+
+        function removeStop(button) {
+            button.closest('.location-input').remove();
+        }
+
+        // Form submission
+        document.getElementById('createRideForm').addEventListener('submit', function(e) {
+            e.preventDefault();
+            
+            // Simulate ride creation
+            setTimeout(() => {
+                const modal = new bootstrap.Modal(document.getElementById('successModal'));
+                modal.show();
+            }, 1000);
+        });
+
+        // Live preview update
+        document.addEventListener('input', updatePreview);
+        document.addEventListener('change', updatePreview);
+
+        function updatePreview() {
+            const pickup = document.getElementById('pickupLocation').value;
+            const destination = document.getElementById('destination').value;
+            const date = document.getElementById('departureDate').value;
+            const time = document.getElementById('departureTime').value;
+            const rideType = document.querySelector('input[name="rideType"]:checked').value;
+            const seats = document.getElementById('availableSeats').value;
+            const price = rideType === 'shared' ? document.getElementById('pricePerSeat').value : document.getElementById('totalPrice').value;
+            
+            const preview = document.getElementById('ridePreview');
+            
+            if (pickup || destination || date || time) {
+                preview.innerHTML = `
+                    <div class="ride-preview-card">
+                        <div class="mb-3">
+                            <h6><i class="fas fa-route text-primary"></i> Route</h6>
+                            <div class="d-flex align-items-center mb-2">
+                                <div class="route-dot bg-success me-2"></div>
+                                <small>${pickup || 'Pickup location'}</small>
+                            </div>
+                            <div class="d-flex align-items-center">
+                                <div class="route-dot bg-danger me-2"></div>
+                                <small>${destination || 'Destination'}</small>
+                            </div>
+                        </div>
+                        
+                        <div class="mb-3">
+                            <h6><i class="fas fa-calendar text-info"></i> Schedule</h6>
+                            <small>${date || 'Date'} at ${time || 'Time'}</small>
+                        </div>
+                        
+                        <div class="mb-3">
+                            <h6><i class="fas fa-users text-warning"></i> Type</h6>
+                            <span class="badge bg-${rideType === 'shared' ? 'info' : 'warning'}">${rideType === 'shared' ? 'Shared' : 'Exclusive'}</span>
+                            ${seats ? `<span class="badge bg-secondary ms-1">${seats} ${seats === 'all' ? '' : seats === '1' ? 'seat' : 'seats'}</span>` : ''}
+                        </div>
+                        
+                        ${price ? `
+                            <div class="mb-3">
+                                <h6><i class="fas fa-dollar-sign text-success"></i> Price</h6>
+                                <strong>$${price} ${rideType === 'shared' ? 'per seat' : 'total'}</strong>
+                            </div>
+                        ` : ''}
+                    </div>
+                `;
+            } else {
+                preview.innerHTML = `
+                    <div class="text-center text-muted py-4">
+                        <i class="fas fa-car fa-3x mb-3"></i>
+                        <p>Fill in the form to see your ride preview</p>
+                    </div>
+                `;
+            }
+        }
+
+        function saveDraft() {
+            alert('Ride saved as draft!');
+        }
+
+        function goToDashboard() {
+            window.location.href = 'driver-dashboard.html';
+        }
+
+        function createAnother() {
+            document.getElementById('createRideForm').reset();
+            document.getElementById('departureDate').min = new Date().toISOString().split('T')[0];
+            document.getElementById('additionalStops').innerHTML = '';
+            stopCount = 0;
+            updatePreview();
+            
+            const modal = bootstrap.Modal.getInstance(document.getElementById('successModal'));
+            modal.hide();
+        }
+    </script>
+</body>
+</html> 
