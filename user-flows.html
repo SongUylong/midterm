@@ -1,0 +1,766 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Hubber User Flows - Visual Guide</title>
+    <!-- Bootstrap CSS -->
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    <!-- Font Awesome -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+    <style>
+        body {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            min-height: 100vh;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+        }
+
+        .container-fluid {
+            padding: 2rem;
+        }
+
+        .header {
+            text-align: center;
+            color: white;
+            margin-bottom: 3rem;
+        }
+
+        .flow-container {
+            background: white;
+            border-radius: 20px;
+            padding: 2rem;
+            margin-bottom: 2rem;
+            box-shadow: 0 15px 35px rgba(0, 0, 0, 0.1);
+        }
+
+        .flow-header {
+            display: flex;
+            align-items: center;
+            margin-bottom: 2rem;
+            padding-bottom: 1rem;
+            border-bottom: 2px solid #f8f9fa;
+        }
+
+        .flow-icon {
+            width: 60px;
+            height: 60px;
+            border-radius: 15px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 1.5rem;
+            color: white;
+            margin-right: 1rem;
+        }
+
+        .passenger-icon { background: linear-gradient(135deg, #007bff, #0056b3); }
+        .driver-icon { background: linear-gradient(135deg, #28a745, #1e7e34); }
+        .admin-icon { background: linear-gradient(135deg, #ffc107, #e0a800); }
+
+        .flow-steps {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 1rem;
+            justify-content: center;
+        }
+
+        .step-card {
+            background: #f8f9fa;
+            border-radius: 15px;
+            padding: 1.5rem;
+            text-align: center;
+            position: relative;
+            min-width: 200px;
+            max-width: 250px;
+            flex: 1;
+            transition: all 0.3s ease;
+            cursor: pointer;
+            border: 2px solid transparent;
+        }
+
+        .step-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 10px 25px rgba(0, 0, 0, 0.1);
+            border-color: #007bff;
+        }
+
+        .step-number {
+            position: absolute;
+            top: -15px;
+            left: 50%;
+            transform: translateX(-50%);
+            width: 30px;
+            height: 30px;
+            background: linear-gradient(135deg, #007bff, #0056b3);
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: white;
+            font-weight: 600;
+            font-size: 0.875rem;
+        }
+
+        .step-icon {
+            font-size: 2rem;
+            margin-bottom: 1rem;
+            color: #007bff;
+        }
+
+        .step-title {
+            font-weight: 600;
+            margin-bottom: 0.5rem;
+            color: #2c3e50;
+        }
+
+        .step-description {
+            font-size: 0.875rem;
+            color: #6c757d;
+            line-height: 1.4;
+        }
+
+        .flow-arrow {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin: 1rem 0;
+        }
+
+        .flow-arrow i {
+            font-size: 1.5rem;
+            color: #007bff;
+        }
+
+        .phase-divider {
+            text-align: center;
+            margin: 2rem 0;
+            position: relative;
+        }
+
+        .phase-divider::before {
+            content: '';
+            position: absolute;
+            top: 50%;
+            left: 0;
+            right: 0;
+            height: 2px;
+            background: linear-gradient(90deg, transparent, #ddd, transparent);
+        }
+
+        .phase-title {
+            background: white;
+            padding: 0.5rem 1rem;
+            border-radius: 25px;
+            font-weight: 600;
+            color: #495057;
+            box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+        }
+
+        .feature-highlight {
+            background: linear-gradient(135deg, #e3f2fd, #bbdefb);
+            border-radius: 10px;
+            padding: 1rem;
+            margin: 1rem 0;
+            border-left: 4px solid #2196f3;
+        }
+
+        .navigation-tabs {
+            display: flex;
+            justify-content: center;
+            margin-bottom: 2rem;
+            gap: 1rem;
+        }
+
+        .nav-tab {
+            background: rgba(255, 255, 255, 0.2);
+            color: white;
+            border: 2px solid rgba(255, 255, 255, 0.3);
+            border-radius: 25px;
+            padding: 0.75rem 1.5rem;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            text-decoration: none;
+        }
+
+        .nav-tab:hover, .nav-tab.active {
+            background: white;
+            color: #667eea;
+            transform: translateY(-2px);
+        }
+
+        .flow-content {
+            display: none;
+        }
+
+        .flow-content.active {
+            display: block;
+        }
+
+        .quick-actions {
+            background: rgba(255, 255, 255, 0.1);
+            border-radius: 15px;
+            padding: 1.5rem;
+            margin-top: 2rem;
+            text-align: center;
+        }
+
+        .quick-action-btn {
+            background: white;
+            color: #667eea;
+            border: none;
+            border-radius: 10px;
+            padding: 0.75rem 1.5rem;
+            margin: 0.5rem;
+            transition: all 0.3s ease;
+            text-decoration: none;
+            display: inline-block;
+        }
+
+        .quick-action-btn:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.2);
+            color: #667eea;
+        }
+
+        @media (max-width: 768px) {
+            .flow-steps {
+                flex-direction: column;
+            }
+            
+            .step-card {
+                max-width: 100%;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="container-fluid">
+        <div class="header">
+            <h1><i class="fas fa-car-side"></i> Hubber User Flow Guide</h1>
+            <p class="lead">Complete step-by-step user journeys for all platform roles</p>
+        </div>
+
+        <!-- Navigation Tabs -->
+        <div class="navigation-tabs">
+            <a href="#" class="nav-tab active" onclick="showFlow('passenger')">
+                <i class="fas fa-user"></i> Passenger Flow
+            </a>
+            <a href="#" class="nav-tab" onclick="showFlow('driver')">
+                <i class="fas fa-car"></i> Driver Flow
+            </a>
+            <a href="#" class="nav-tab" onclick="showFlow('admin')">
+                <i class="fas fa-user-shield"></i> Admin Flow
+            </a>
+        </div>
+
+        <!-- Passenger Flow -->
+        <div id="passengerFlow" class="flow-content active">
+            <div class="flow-container">
+                <div class="flow-header">
+                    <div class="flow-icon passenger-icon">
+                        <i class="fas fa-user"></i>
+                    </div>
+                    <div>
+                        <h2>Passenger Journey</h2>
+                        <p class="text-muted mb-0">From registration to ride completion</p>
+                    </div>
+                </div>
+
+                <!-- Account Setup Phase -->
+                <div class="phase-divider">
+                    <span class="phase-title">Account Setup</span>
+                </div>
+
+                <div class="flow-steps">
+                    <div class="step-card" onclick="highlightStep(this)">
+                        <div class="step-number">1</div>
+                        <div class="step-icon"><i class="fas fa-home"></i></div>
+                        <div class="step-title">Visit Homepage</div>
+                        <div class="step-description">Start your journey at index.html</div>
+                    </div>
+
+                    <div class="step-card" onclick="highlightStep(this)">
+                        <div class="step-number">2</div>
+                        <div class="step-icon"><i class="fas fa-user-plus"></i></div>
+                        <div class="step-title">Register Account</div>
+                        <div class="step-description">Choose "Passenger" role and fill personal details</div>
+                    </div>
+
+                    <div class="step-card" onclick="highlightStep(this)">
+                        <div class="step-number">3</div>
+                        <div class="step-icon"><i class="fas fa-envelope-open"></i></div>
+                        <div class="step-title">Email Verification</div>
+                        <div class="step-description">Verify email and activate account</div>
+                    </div>
+
+                    <div class="step-card" onclick="highlightStep(this)">
+                        <div class="step-number">4</div>
+                        <div class="step-icon"><i class="fas fa-sign-in-alt"></i></div>
+                        <div class="step-title">Login</div>
+                        <div class="step-description">Access your account with credentials</div>
+                    </div>
+                </div>
+
+                <!-- Profile Setup Phase -->
+                <div class="phase-divider">
+                    <span class="phase-title">Profile Setup</span>
+                </div>
+
+                <div class="flow-steps">
+                    <div class="step-card" onclick="highlightStep(this)">
+                        <div class="step-number">5</div>
+                        <div class="step-icon"><i class="fas fa-user-edit"></i></div>
+                        <div class="step-title">Complete Profile</div>
+                        <div class="step-description">Add contact info and upload optional photo</div>
+                    </div>
+
+                    <div class="step-card" onclick="highlightStep(this)">
+                        <div class="step-number">6</div>
+                        <div class="step-icon"><i class="fas fa-save"></i></div>
+                        <div class="step-title">Save Changes</div>
+                        <div class="step-description">Update and save profile information</div>
+                    </div>
+                </div>
+
+                <!-- Ride Booking Phase -->
+                <div class="phase-divider">
+                    <span class="phase-title">Ride Search & Booking</span>
+                </div>
+
+                <div class="flow-steps">
+                    <div class="step-card" onclick="highlightStep(this)">
+                        <div class="step-number">7</div>
+                        <div class="step-icon"><i class="fas fa-search"></i></div>
+                        <div class="step-title">Search Rides</div>
+                        <div class="step-description">Enter pickup, destination, date/time</div>
+                    </div>
+
+                    <div class="step-card" onclick="highlightStep(this)">
+                        <div class="step-number">8</div>
+                        <div class="step-icon"><i class="fas fa-filter"></i></div>
+                        <div class="step-title">Apply Filters</div>
+                        <div class="step-description">Filter by ride type, cost, driver rating</div>
+                    </div>
+
+                    <div class="step-card" onclick="highlightStep(this)">
+                        <div class="step-number">9</div>
+                        <div class="step-icon"><i class="fas fa-list"></i></div>
+                        <div class="step-title">View Results</div>
+                        <div class="step-description">Browse available rides and driver profiles</div>
+                    </div>
+
+                    <div class="step-card" onclick="highlightStep(this)">
+                        <div class="step-number">10</div>
+                        <div class="step-icon"><i class="fas fa-chair"></i></div>
+                        <div class="step-title">Select Seats</div>
+                        <div class="step-description">Choose seats for shared rides or book exclusive</div>
+                    </div>
+                </div>
+
+                <!-- Payment & Completion -->
+                <div class="phase-divider">
+                    <span class="phase-title">Payment & Completion</span>
+                </div>
+
+                <div class="flow-steps">
+                    <div class="step-card" onclick="highlightStep(this)">
+                        <div class="step-number">11</div>
+                        <div class="step-icon"><i class="fas fa-credit-card"></i></div>
+                        <div class="step-title">Payment</div>
+                        <div class="step-description">Choose payment method and complete transaction</div>
+                    </div>
+
+                    <div class="step-card" onclick="highlightStep(this)">
+                        <div class="step-number">12</div>
+                        <div class="step-icon"><i class="fas fa-check-circle"></i></div>
+                        <div class="step-title">Confirmation</div>
+                        <div class="step-description">Receive booking confirmation and notifications</div>
+                    </div>
+
+                    <div class="step-card" onclick="highlightStep(this)">
+                        <div class="step-number">13</div>
+                        <div class="step-icon"><i class="fas fa-car-side"></i></div>
+                        <div class="step-title">Ride Day</div>
+                        <div class="step-description">Get notified when driver arrives</div>
+                    </div>
+
+                    <div class="step-card" onclick="highlightStep(this)">
+                        <div class="step-number">14</div>
+                        <div class="step-icon"><i class="fas fa-star"></i></div>
+                        <div class="step-title">Rate & Review</div>
+                        <div class="step-description">Leave feedback and rating for driver</div>
+                    </div>
+                </div>
+
+                <div class="feature-highlight">
+                    <h5><i class="fas fa-lightbulb"></i> Key Features</h5>
+                    <ul class="mb-0">
+                        <li>Smart ride matching algorithm</li>
+                        <li>Real-time driver tracking</li>
+                        <li>Multiple payment options</li>
+                        <li>In-app messaging with drivers</li>
+                        <li>Ride history and receipts</li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+
+        <!-- Driver Flow -->
+        <div id="driverFlow" class="flow-content">
+            <div class="flow-container">
+                <div class="flow-header">
+                    <div class="flow-icon driver-icon">
+                        <i class="fas fa-car"></i>
+                    </div>
+                    <div>
+                        <h2>Driver Journey</h2>
+                        <p class="text-muted mb-0">From registration to earning income</p>
+                    </div>
+                </div>
+
+                <!-- Account Setup Phase -->
+                <div class="phase-divider">
+                    <span class="phase-title">Account Setup & Verification</span>
+                </div>
+
+                <div class="flow-steps">
+                    <div class="step-card" onclick="highlightStep(this)">
+                        <div class="step-number">1</div>
+                        <div class="step-icon"><i class="fas fa-user-plus"></i></div>
+                        <div class="step-title">Register as Driver</div>
+                        <div class="step-description">Choose "Driver" role and enter personal details</div>
+                    </div>
+
+                    <div class="step-card" onclick="highlightStep(this)">
+                        <div class="step-number">2</div>
+                        <div class="step-icon"><i class="fas fa-car"></i></div>
+                        <div class="step-title">Vehicle Information</div>
+                        <div class="step-description">Enter car details, make, model, year</div>
+                    </div>
+
+                    <div class="step-card" onclick="highlightStep(this)">
+                        <div class="step-number">3</div>
+                        <div class="step-icon"><i class="fas fa-file-upload"></i></div>
+                        <div class="step-title">Upload Documents</div>
+                        <div class="step-description">Submit license, registration, insurance</div>
+                    </div>
+
+                    <div class="step-card" onclick="highlightStep(this)">
+                        <div class="step-number">4</div>
+                        <div class="step-icon"><i class="fas fa-clock"></i></div>
+                        <div class="step-title">Wait for Approval</div>
+                        <div class="step-description">Admin reviews and approves documents</div>
+                    </div>
+
+                    <div class="step-card" onclick="highlightStep(this)">
+                        <div class="step-number">5</div>
+                        <div class="step-icon"><i class="fas fa-check-circle"></i></div>
+                        <div class="step-title">Account Activated</div>
+                        <div class="step-description">Receive approval email and login access</div>
+                    </div>
+                </div>
+
+                <!-- Profile Management -->
+                <div class="phase-divider">
+                    <span class="phase-title">Profile Management</span>
+                </div>
+
+                <div class="flow-steps">
+                    <div class="step-card" onclick="highlightStep(this)">
+                        <div class="step-number">6</div>
+                        <div class="step-icon"><i class="fas fa-tachometer-alt"></i></div>
+                        <div class="step-title">Driver Dashboard</div>
+                        <div class="step-description">Access driver dashboard and overview</div>
+                    </div>
+
+                    <div class="step-card" onclick="highlightStep(this)">
+                        <div class="step-number">7</div>
+                        <div class="step-icon"><i class="fas fa-edit"></i></div>
+                        <div class="step-title">Update Profile</div>
+                        <div class="step-description">Edit vehicle and personal information</div>
+                    </div>
+                </div>
+
+                <!-- Ride Creation & Management -->
+                <div class="phase-divider">
+                    <span class="phase-title">Ride Creation & Management</span>
+                </div>
+
+                <div class="flow-steps">
+                    <div class="step-card" onclick="highlightStep(this)">
+                        <div class="step-number">8</div>
+                        <div class="step-icon"><i class="fas fa-plus-circle"></i></div>
+                        <div class="step-title">Create Ride</div>
+                        <div class="step-description">Post new ride with route and pricing</div>
+                    </div>
+
+                    <div class="step-card" onclick="highlightStep(this)">
+                        <div class="step-number">9</div>
+                        <div class="step-icon"><i class="fas fa-cog"></i></div>
+                        <div class="step-title">Set Preferences</div>
+                        <div class="step-description">Choose shared/exclusive, price, stops</div>
+                    </div>
+
+                    <div class="step-card" onclick="highlightStep(this)">
+                        <div class="step-number">10</div>
+                        <div class="step-icon"><i class="fas fa-inbox"></i></div>
+                        <div class="step-title">Manage Bookings</div>
+                        <div class="step-description">Accept/decline passenger requests</div>
+                    </div>
+
+                    <div class="step-card" onclick="highlightStep(this)">
+                        <div class="step-number">11</div>
+                        <div class="step-icon"><i class="fas fa-route"></i></div>
+                        <div class="step-title">Update Ride Status</div>
+                        <div class="step-description">Mark as in progress, completed, or cancelled</div>
+                    </div>
+                </div>
+
+                <!-- Earnings & Feedback -->
+                <div class="phase-divider">
+                    <span class="phase-title">Earnings & Feedback</span>
+                </div>
+
+                <div class="flow-steps">
+                    <div class="step-card" onclick="highlightStep(this)">
+                        <div class="step-number">12</div>
+                        <div class="step-icon"><i class="fas fa-bell"></i></div>
+                        <div class="step-title">Notify Passengers</div>
+                        <div class="step-description">Send arrival notifications to passengers</div>
+                    </div>
+
+                    <div class="step-card" onclick="highlightStep(this)">
+                        <div class="step-number">13</div>
+                        <div class="step-icon"><i class="fas fa-star"></i></div>
+                        <div class="step-title">View Ratings</div>
+                        <div class="step-description">Check passenger feedback and ratings</div>
+                    </div>
+
+                    <div class="step-card" onclick="highlightStep(this)">
+                        <div class="step-number">14</div>
+                        <div class="step-icon"><i class="fas fa-dollar-sign"></i></div>
+                        <div class="step-title">Track Earnings</div>
+                        <div class="step-description">Monitor income and payment history</div>
+                    </div>
+                </div>
+
+                <div class="feature-highlight">
+                    <h5><i class="fas fa-lightbulb"></i> Driver Benefits</h5>
+                    <ul class="mb-0">
+                        <li>Flexible scheduling and route planning</li>
+                        <li>Real-time earnings tracking</li>
+                        <li>Passenger rating and feedback system</li>
+                        <li>Vehicle and document management</li>
+                        <li>Direct communication with passengers</li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+
+        <!-- Admin Flow -->
+        <div id="adminFlow" class="flow-content">
+            <div class="flow-container">
+                <div class="flow-header">
+                    <div class="flow-icon admin-icon">
+                        <i class="fas fa-user-shield"></i>
+                    </div>
+                    <div>
+                        <h2>Admin Journey</h2>
+                        <p class="text-muted mb-0">Platform management and oversight</p>
+                    </div>
+                </div>
+
+                <!-- Access & Setup -->
+                <div class="phase-divider">
+                    <span class="phase-title">Access & Setup</span>
+                </div>
+
+                <div class="flow-steps">
+                    <div class="step-card" onclick="highlightStep(this)">
+                        <div class="step-number">1</div>
+                        <div class="step-icon"><i class="fas fa-key"></i></div>
+                        <div class="step-title">Admin Login</div>
+                        <div class="step-description">Access admin dashboard with credentials</div>
+                    </div>
+
+                    <div class="step-card" onclick="highlightStep(this)">
+                        <div class="step-number">2</div>
+                        <div class="step-icon"><i class="fas fa-tachometer-alt"></i></div>
+                        <div class="step-title">Dashboard Overview</div>
+                        <div class="step-description">View platform statistics and alerts</div>
+                    </div>
+                </div>
+
+                <!-- User Management -->
+                <div class="phase-divider">
+                    <span class="phase-title">User Management</span>
+                </div>
+
+                <div class="flow-steps">
+                    <div class="step-card" onclick="highlightStep(this)">
+                        <div class="step-number">3</div>
+                        <div class="step-icon"><i class="fas fa-users"></i></div>
+                        <div class="step-title">View All Users</div>
+                        <div class="step-description">Browse registered passengers and drivers</div>
+                    </div>
+
+                    <div class="step-card" onclick="highlightStep(this)">
+                        <div class="step-number">4</div>
+                        <div class="step-icon"><i class="fas fa-user-check"></i></div>
+                        <div class="step-title">Driver Verification</div>
+                        <div class="step-description">Review and approve driver applications</div>
+                    </div>
+
+                    <div class="step-card" onclick="highlightStep(this)">
+                        <div class="step-number">5</div>
+                        <div class="step-icon"><i class="fas fa-file-alt"></i></div>
+                        <div class="step-title">Document Review</div>
+                        <div class="step-description">Verify licenses, registration, insurance</div>
+                    </div>
+
+                    <div class="step-card" onclick="highlightStep(this)">
+                        <div class="step-number">6</div>
+                        <div class="step-icon"><i class="fas fa-edit"></i></div>
+                        <div class="step-title">Manage Accounts</div>
+                        <div class="step-description">Edit, suspend, or delete user accounts</div>
+                    </div>
+                </div>
+
+                <!-- Platform Monitoring -->
+                <div class="phase-divider">
+                    <span class="phase-title">Platform Monitoring</span>
+                </div>
+
+                <div class="flow-steps">
+                    <div class="step-card" onclick="highlightStep(this)">
+                        <div class="step-number">7</div>
+                        <div class="step-icon"><i class="fas fa-route"></i></div>
+                        <div class="step-title">Monitor Rides</div>
+                        <div class="step-description">Track all rides and their status</div>
+                    </div>
+
+                    <div class="step-card" onclick="highlightStep(this)">
+                        <div class="step-number">8</div>
+                        <div class="step-icon"><i class="fas fa-filter"></i></div>
+                        <div class="step-title">Filter & Search</div>
+                        <div class="step-description">Filter by status, date, region</div>
+                    </div>
+
+                    <div class="step-card" onclick="highlightStep(this)">
+                        <div class="step-number">9</div>
+                        <div class="step-icon"><i class="fas fa-info-circle"></i></div>
+                        <div class="step-title">View Details</div>
+                        <div class="step-description">Check driver, passenger, cost, routes</div>
+                    </div>
+                </div>
+
+                <!-- Reports & Analytics -->
+                <div class="phase-divider">
+                    <span class="phase-title">Reports & Analytics</span>
+                </div>
+
+                <div class="flow-steps">
+                    <div class="step-card" onclick="highlightStep(this)">
+                        <div class="step-number">10</div>
+                        <div class="step-icon"><i class="fas fa-chart-bar"></i></div>
+                        <div class="step-title">Generate Reports</div>
+                        <div class="step-description">Create revenue and usage reports</div>
+                    </div>
+
+                    <div class="step-card" onclick="highlightStep(this)">
+                        <div class="step-number">11</div>
+                        <div class="step-icon"><i class="fas fa-download"></i></div>
+                        <div class="step-title">Export Data</div>
+                        <div class="step-description">Download reports in PDF or CSV format</div>
+                    </div>
+
+                    <div class="step-card" onclick="highlightStep(this)">
+                        <div class="step-number">12</div>
+                        <div class="step-icon"><i class="fas fa-bell"></i></div>
+                        <div class="step-title">Send Notifications</div>
+                        <div class="step-description">Manage platform-wide communications</div>
+                    </div>
+                </div>
+
+                <div class="feature-highlight">
+                    <h5><i class="fas fa-lightbulb"></i> Admin Capabilities</h5>
+                    <ul class="mb-0">
+                        <li>Complete user lifecycle management</li>
+                        <li>Real-time platform monitoring</li>
+                        <li>Comprehensive analytics and reporting</li>
+                        <li>Document verification system</li>
+                        <li>Automated notification management</li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+
+        <!-- Quick Actions -->
+        <div class="quick-actions">
+            <h4 class="text-white mb-3">Quick Actions</h4>
+            <a href="test-login.html" class="quick-action-btn">
+                <i class="fas fa-vial"></i> Test Login System
+            </a>
+            <a href="login.html" class="quick-action-btn">
+                <i class="fas fa-sign-in-alt"></i> Login Page
+            </a>
+            <a href="register.html" class="quick-action-btn">
+                <i class="fas fa-user-plus"></i> Registration
+            </a>
+            <a href="passenger-dashboard.html" class="quick-action-btn">
+                <i class="fas fa-tachometer-alt"></i> Passenger Dashboard
+            </a>
+            <a href="driver-dashboard.html" class="quick-action-btn">
+                <i class="fas fa-car"></i> Driver Dashboard
+            </a>
+            <a href="admin-dashboard.html" class="quick-action-btn">
+                <i class="fas fa-user-shield"></i> Admin Dashboard
+            </a>
+        </div>
+    </div>
+
+    <!-- Bootstrap JS -->
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+    <script>
+        function showFlow(flowType) {
+            // Hide all flows
+            document.querySelectorAll('.flow-content').forEach(flow => {
+                flow.classList.remove('active');
+            });
+
+            // Show selected flow
+            document.getElementById(flowType + 'Flow').classList.add('active');
+
+            // Update active tab
+            document.querySelectorAll('.nav-tab').forEach(tab => {
+                tab.classList.remove('active');
+            });
+            event.target.classList.add('active');
+        }
+
+        function highlightStep(stepCard) {
+            // Remove previous highlights
+            document.querySelectorAll('.step-card').forEach(card => {
+                card.style.borderColor = 'transparent';
+                card.style.background = '#f8f9fa';
+            });
+
+            // Highlight selected step
+            stepCard.style.borderColor = '#007bff';
+            stepCard.style.background = 'linear-gradient(135deg, #e3f2fd, #bbdefb)';
+
+            // Show step details (you could expand this to show more info)
+            const stepTitle = stepCard.querySelector('.step-title').textContent;
+            const stepDesc = stepCard.querySelector('.step-description').textContent;
+            
+            // You could show a modal or tooltip with more details here
+            console.log(`Selected: ${stepTitle} - ${stepDesc}`);
+        }
+
+        // Initialize with passenger flow
+        document.addEventListener('DOMContentLoaded', function() {
+            console.log('🚗 Hubber User Flow Guide Loaded');
+        });
+    </script>
+</body>
+</html> 

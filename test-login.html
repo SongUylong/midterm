@@ -1,0 +1,538 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Login System Test - Hubber</title>
+    <!-- Bootstrap CSS -->
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    <!-- Font Awesome -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+    <style>
+        body {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            min-height: 100vh;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+        }
+
+        .test-container {
+            padding: 2rem;
+            max-width: 1200px;
+            margin: 0 auto;
+        }
+
+        .test-card {
+            background: white;
+            border-radius: 15px;
+            padding: 2rem;
+            margin-bottom: 2rem;
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.1);
+        }
+
+        .credential-card {
+            background: #f8f9fa;
+            border-radius: 10px;
+            padding: 1.5rem;
+            margin-bottom: 1rem;
+            border: 2px solid transparent;
+            transition: all 0.3s ease;
+            cursor: pointer;
+        }
+
+        .credential-card:hover {
+            border-color: #007bff;
+            transform: translateY(-2px);
+        }
+
+        .credential-card.passenger {
+            border-left: 4px solid #007bff;
+        }
+
+        .credential-card.driver {
+            border-left: 4px solid #28a745;
+        }
+
+        .credential-card.admin {
+            border-left: 4px solid #ffc107;
+        }
+
+        .status-display {
+            background: #f8f9fa;
+            border-radius: 10px;
+            padding: 1rem;
+            margin-top: 1rem;
+        }
+
+        .session-info {
+            background: #e7f3ff;
+            border-radius: 10px;
+            padding: 1rem;
+            margin-top: 1rem;
+        }
+
+        .btn-test {
+            margin: 0.25rem;
+        }
+
+        .dashboard-links {
+            display: flex;
+            gap: 1rem;
+            flex-wrap: wrap;
+            margin-top: 1rem;
+        }
+
+        .storage-viewer {
+            background: #f8f9fa;
+            border-radius: 10px;
+            padding: 1rem;
+            margin-top: 1rem;
+            font-family: 'Courier New', monospace;
+            font-size: 0.875rem;
+            max-height: 300px;
+            overflow-y: auto;
+        }
+
+        .header-title {
+            color: white;
+            text-align: center;
+            margin-bottom: 2rem;
+        }
+    </style>
+</head>
+<body>
+    <div class="test-container">
+        <div class="header-title">
+            <h1><i class="fas fa-car-side"></i> Hubber Login System Test</h1>
+            <p class="lead">Test the localStorage-based authentication system</p>
+        </div>
+
+        <!-- Test Credentials -->
+        <div class="test-card">
+            <h3><i class="fas fa-users"></i> Test User Accounts</h3>
+            <p class="text-muted">Click on any credential card to automatically login with that account</p>
+            
+            <div class="row">
+                <div class="col-md-4">
+                    <div class="credential-card passenger" onclick="testLogin('passenger@test.com', 'password123', 'passenger')">
+                        <div class="d-flex align-items-center">
+                            <i class="fas fa-user fa-2x text-primary me-3"></i>
+                            <div>
+                                <h5 class="mb-1">Passenger Account</h5>
+                                <p class="mb-1"><strong>Email:</strong> passenger@test.com</p>
+                                <p class="mb-1"><strong>Password:</strong> password123</p>
+                                <small class="text-muted">John Doe - Regular passenger user</small>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="col-md-4">
+                    <div class="credential-card driver" onclick="testLogin('driver@test.com', 'password123', 'driver')">
+                        <div class="d-flex align-items-center">
+                            <i class="fas fa-car fa-2x text-success me-3"></i>
+                            <div>
+                                <h5 class="mb-1">Driver Account</h5>
+                                <p class="mb-1"><strong>Email:</strong> driver@test.com</p>
+                                <p class="mb-1"><strong>Password:</strong> password123</p>
+                                <small class="text-muted">Michael Smith - Verified driver</small>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="col-md-4">
+                    <div class="credential-card admin" onclick="testLogin('admin@test.com', 'admin123', 'admin')">
+                        <div class="d-flex align-items-center">
+                            <i class="fas fa-user-shield fa-2x text-warning me-3"></i>
+                            <div>
+                                <h5 class="mb-1">Admin Account</h5>
+                                <p class="mb-1"><strong>Email:</strong> admin@test.com</p>
+                                <p class="mb-1"><strong>Password:</strong> admin123</p>
+                                <small class="text-muted">Sarah Johnson - System administrator</small>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Session Status -->
+        <div class="test-card">
+            <h3><i class="fas fa-info-circle"></i> Session Status</h3>
+            <div id="sessionStatus" class="status-display">
+                <p><strong>Status:</strong> <span id="sessionState">No active session</span></p>
+                <div id="sessionDetails" class="d-none">
+                    <p><strong>User:</strong> <span id="currentUser">-</span></p>
+                    <p><strong>Role:</strong> <span id="currentRole">-</span></p>
+                    <p><strong>Email:</strong> <span id="currentEmail">-</span></p>
+                    <p><strong>Session ID:</strong> <span id="sessionId">-</span></p>
+                    <p><strong>Expires:</strong> <span id="sessionExpiry">-</span></p>
+                </div>
+            </div>
+            
+            <div class="dashboard-links">
+                <a href="passenger-dashboard.html" class="btn btn-primary">
+                    <i class="fas fa-user"></i> Passenger Dashboard
+                </a>
+                <a href="driver-dashboard.html" class="btn btn-success">
+                    <i class="fas fa-car"></i> Driver Dashboard
+                </a>
+                <a href="admin-dashboard.html" class="btn btn-warning">
+                    <i class="fas fa-user-shield"></i> Admin Dashboard
+                </a>
+            </div>
+        </div>
+
+        <!-- Test Actions -->
+        <div class="test-card">
+            <h3><i class="fas fa-cogs"></i> Test Actions</h3>
+            <div class="row">
+                <div class="col-md-6">
+                    <h5>Authentication Tests</h5>
+                    <button class="btn btn-outline-primary btn-test" onclick="testInvalidLogin()">
+                        <i class="fas fa-times"></i> Test Invalid Login
+                    </button>
+                    <button class="btn btn-outline-warning btn-test" onclick="testWrongRole()">
+                        <i class="fas fa-exclamation-triangle"></i> Test Wrong Role
+                    </button>
+                    <button class="btn btn-outline-success btn-test" onclick="refreshSession()">
+                        <i class="fas fa-sync"></i> Refresh Session
+                    </button>
+                    <button class="btn btn-outline-info btn-test" onclick="extendSession()">
+                        <i class="fas fa-clock"></i> Extend Session
+                    </button>
+                </div>
+                
+                <div class="col-md-6">
+                    <h5>Data Management</h5>
+                    <button class="btn btn-outline-danger btn-test" onclick="logout()">
+                        <i class="fas fa-sign-out-alt"></i> Logout
+                    </button>
+                    <button class="btn btn-outline-dark btn-test" onclick="viewLocalStorage()">
+                        <i class="fas fa-database"></i> View Storage
+                    </button>
+                    <button class="btn btn-outline-secondary btn-test" onclick="clearAllData()">
+                        <i class="fas fa-trash"></i> Clear All Data
+                    </button>
+                    <a href="login.html" class="btn btn-outline-primary btn-test">
+                        <i class="fas fa-sign-in-alt"></i> Go to Login Page
+                    </a>
+                </div>
+            </div>
+        </div>
+
+        <!-- Storage Viewer -->
+        <div class="test-card">
+            <h3><i class="fas fa-database"></i> LocalStorage Contents</h3>
+            <button class="btn btn-sm btn-outline-primary" onclick="updateStorageDisplay()">
+                <i class="fas fa-sync"></i> Refresh
+            </button>
+            <div id="storageDisplay" class="storage-viewer">
+                Click "Refresh" to view localStorage contents
+            </div>
+        </div>
+
+        <!-- Login History -->
+        <div class="test-card">
+            <h3><i class="fas fa-history"></i> Login History</h3>
+            <div id="loginHistory" class="table-responsive">
+                <p class="text-muted">No login history available</p>
+            </div>
+        </div>
+    </div>
+
+    <!-- Bootstrap JS -->
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+    <script>
+        // Initialize auth system
+        class TestAuthSystem {
+            constructor() {
+                this.sessionKey = 'hubber_session';
+                this.usersKey = 'hubber_users';
+                this.historyKey = 'hubber_login_history';
+                this.initializeTestUsers();
+                this.updateDisplay();
+            }
+
+            initializeTestUsers() {
+                const testUsers = {
+                    'passenger@test.com': {
+                        password: 'password123',
+                        role: 'passenger',
+                        name: 'John Doe',
+                        id: 'user_001',
+                        profile: {
+                            phone: '+1234567890',
+                            location: 'New York, NY',
+                            joined: '2024-01-15'
+                        }
+                    },
+                    'driver@test.com': {
+                        password: 'password123',
+                        role: 'driver',
+                        name: 'Michael Smith',
+                        id: 'driver_001',
+                        profile: {
+                            phone: '+1234567891',
+                            license: 'DL123456789',
+                            vehicle: 'Toyota Camry 2020',
+                            rating: 4.8,
+                            totalRides: 156
+                        }
+                    },
+                    'admin@test.com': {
+                        password: 'admin123',
+                        role: 'admin',
+                        name: 'Sarah Johnson',
+                        id: 'admin_001',
+                        profile: {
+                            phone: '+1234567892',
+                            department: 'Platform Operations',
+                            level: 'Senior Administrator'
+                        }
+                    }
+                };
+
+                if (!localStorage.getItem(this.usersKey)) {
+                    localStorage.setItem(this.usersKey, JSON.stringify(testUsers));
+                }
+            }
+
+            login(email, password, role) {
+                const users = JSON.parse(localStorage.getItem(this.usersKey));
+                const user = users[email];
+
+                if (!user) throw new Error('User not found');
+                if (user.password !== password) throw new Error('Invalid password');
+                if (user.role !== role) throw new Error(`Invalid role. Account is ${user.role}`);
+
+                const sessionData = {
+                    user: {
+                        email: email,
+                        name: user.name,
+                        role: user.role,
+                        id: user.id,
+                        profile: user.profile
+                    },
+                    loginTime: new Date().toISOString(),
+                    expiry: new Date(Date.now() + 24 * 60 * 60 * 1000).toISOString(),
+                    sessionId: 'session_' + Date.now() + '_' + Math.random().toString(36).substr(2, 9)
+                };
+
+                localStorage.setItem(this.sessionKey, JSON.stringify(sessionData));
+                this.addToHistory(sessionData);
+                return sessionData;
+            }
+
+            addToHistory(sessionData) {
+                let history = JSON.parse(localStorage.getItem(this.historyKey) || '[]');
+                history.unshift({
+                    email: sessionData.user.email,
+                    role: sessionData.user.role,
+                    loginTime: sessionData.loginTime,
+                    sessionId: sessionData.sessionId
+                });
+                history = history.slice(0, 10);
+                localStorage.setItem(this.historyKey, JSON.stringify(history));
+            }
+
+            getCurrentSession() {
+                try {
+                    const session = localStorage.getItem(this.sessionKey);
+                    if (!session) return null;
+
+                    const sessionData = JSON.parse(session);
+                    const expiry = new Date(sessionData.expiry);
+
+                    if (expiry > new Date()) {
+                        return sessionData;
+                    } else {
+                        localStorage.removeItem(this.sessionKey);
+                        return null;
+                    }
+                } catch {
+                    return null;
+                }
+            }
+
+            updateDisplay() {
+                const session = this.getCurrentSession();
+                const sessionState = document.getElementById('sessionState');
+                const sessionDetails = document.getElementById('sessionDetails');
+
+                if (session) {
+                    sessionState.textContent = 'Active Session';
+                    sessionState.className = 'text-success';
+                    
+                    document.getElementById('currentUser').textContent = session.user.name;
+                    document.getElementById('currentRole').textContent = session.user.role;
+                    document.getElementById('currentEmail').textContent = session.user.email;
+                    document.getElementById('sessionId').textContent = session.sessionId;
+                    document.getElementById('sessionExpiry').textContent = new Date(session.expiry).toLocaleString();
+                    
+                    sessionDetails.classList.remove('d-none');
+                } else {
+                    sessionState.textContent = 'No Active Session';
+                    sessionState.className = 'text-muted';
+                    sessionDetails.classList.add('d-none');
+                }
+
+                this.updateLoginHistory();
+            }
+
+            updateLoginHistory() {
+                const history = JSON.parse(localStorage.getItem(this.historyKey) || '[]');
+                const historyContainer = document.getElementById('loginHistory');
+
+                if (history.length === 0) {
+                    historyContainer.innerHTML = '<p class="text-muted">No login history available</p>';
+                    return;
+                }
+
+                const table = `
+                    <table class="table table-sm">
+                        <thead>
+                            <tr>
+                                <th>Email</th>
+                                <th>Role</th>
+                                <th>Login Time</th>
+                                <th>Session ID</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            ${history.map(h => `
+                                <tr>
+                                    <td>${h.email}</td>
+                                    <td><span class="badge bg-secondary">${h.role}</span></td>
+                                    <td>${new Date(h.loginTime).toLocaleString()}</td>
+                                    <td><code>${h.sessionId}</code></td>
+                                </tr>
+                            `).join('')}
+                        </tbody>
+                    </table>
+                `;
+
+                historyContainer.innerHTML = table;
+            }
+        }
+
+        const testAuth = new TestAuthSystem();
+
+        // Test functions
+        function testLogin(email, password, role) {
+            try {
+                const session = testAuth.login(email, password, role);
+                showMessage(`✅ Login successful for ${session.user.name} (${session.user.role})`, 'success');
+                testAuth.updateDisplay();
+            } catch (error) {
+                showMessage(`❌ Login failed: ${error.message}`, 'danger');
+            }
+        }
+
+        function testInvalidLogin() {
+            try {
+                testAuth.login('invalid@test.com', 'wrongpassword', 'passenger');
+            } catch (error) {
+                showMessage(`✅ Correctly rejected invalid login: ${error.message}`, 'success');
+            }
+        }
+
+        function testWrongRole() {
+            try {
+                testAuth.login('passenger@test.com', 'password123', 'admin');
+            } catch (error) {
+                showMessage(`✅ Correctly rejected wrong role: ${error.message}`, 'success');
+            }
+        }
+
+        function refreshSession() {
+            testAuth.updateDisplay();
+            showMessage('🔄 Session display refreshed', 'info');
+        }
+
+        function extendSession() {
+            const session = testAuth.getCurrentSession();
+            if (session) {
+                session.expiry = new Date(Date.now() + 24 * 60 * 60 * 1000).toISOString();
+                localStorage.setItem('hubber_session', JSON.stringify(session));
+                testAuth.updateDisplay();
+                showMessage('⏰ Session extended by 24 hours', 'success');
+            } else {
+                showMessage('❌ No active session to extend', 'warning');
+            }
+        }
+
+        function logout() {
+            localStorage.removeItem('hubber_session');
+            testAuth.updateDisplay();
+            showMessage('👋 Logged out successfully', 'info');
+        }
+
+        function viewLocalStorage() {
+            updateStorageDisplay();
+            document.getElementById('storageDisplay').scrollIntoView({ behavior: 'smooth' });
+        }
+
+        function updateStorageDisplay() {
+            const display = document.getElementById('storageDisplay');
+            const storageData = {};
+            
+            for (let i = 0; i < localStorage.length; i++) {
+                const key = localStorage.key(i);
+                if (key && key.startsWith('hubber_')) {
+                    try {
+                        storageData[key] = JSON.parse(localStorage.getItem(key));
+                    } catch {
+                        storageData[key] = localStorage.getItem(key);
+                    }
+                }
+            }
+
+            display.innerHTML = `<pre>${JSON.stringify(storageData, null, 2)}</pre>`;
+        }
+
+        function clearAllData() {
+            if (confirm('Are you sure you want to clear all Hubber data from localStorage?')) {
+                const keysToRemove = [];
+                for (let i = 0; i < localStorage.length; i++) {
+                    const key = localStorage.key(i);
+                    if (key && key.startsWith('hubber_')) {
+                        keysToRemove.push(key);
+                    }
+                }
+                keysToRemove.forEach(key => localStorage.removeItem(key));
+                
+                testAuth.initializeTestUsers();
+                testAuth.updateDisplay();
+                showMessage('🗑️ All data cleared and reset', 'warning');
+            }
+        }
+
+        function showMessage(message, type) {
+            const alert = document.createElement('div');
+            alert.className = `alert alert-${type} alert-dismissible fade show position-fixed`;
+            alert.style.cssText = 'top: 20px; right: 20px; z-index: 9999; min-width: 300px;';
+            alert.innerHTML = `
+                ${message}
+                <button type="button" class="btn-close" data-bs-dismiss="alert"></button>
+            `;
+
+            document.body.appendChild(alert);
+
+            setTimeout(() => {
+                if (alert.parentNode) {
+                    alert.parentNode.removeChild(alert);
+                }
+            }, 5000);
+        }
+
+        // Auto-refresh display every 30 seconds
+        setInterval(() => {
+            testAuth.updateDisplay();
+        }, 30000);
+
+        console.log('🧪 Hubber Login Test System Loaded');
+        console.log('💡 All test functions are available globally');
+    </script>
+</body>
+</html> 
