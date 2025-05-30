@@ -159,29 +159,6 @@
                 <i class="fas fa-check-circle"></i> <span id="successMessage">Login successful!</span>
             </div>
 
-            <!-- Test Credentials -->
-            <div class="test-credentials">
-                <h6 class="mb-2"><i class="fas fa-info-circle"></i> Test Credentials:</h6>
-                <div class="credential-item">
-                    <strong>Passenger:</strong> passenger@test.com / password123
-                    <button class="btn btn-sm btn-outline-primary quick-login-btn" onclick="quickLogin('passenger@test.com', 'password123', 'passenger')">
-                        Quick Login
-                    </button>
-                </div>
-                <div class="credential-item">
-                    <strong>Driver:</strong> driver@test.com / password123
-                    <button class="btn btn-sm btn-outline-success quick-login-btn" onclick="quickLogin('driver@test.com', 'password123', 'driver')">
-                        Quick Login
-                    </button>
-                </div>
-                <div class="credential-item">
-                    <strong>Admin:</strong> admin@test.com / admin123
-                    <button class="btn btn-sm btn-outline-warning quick-login-btn" onclick="quickLogin('admin@test.com', 'admin123', 'admin')">
-                        Quick Login
-                    </button>
-                </div>
-            </div>
-
             <form id="loginForm">
                 <div class="role-selector">
                     <div class="role-option active" onclick="selectRole(this, 'passenger')" data-role="passenger">
